@@ -1,0 +1,219 @@
+// ============================================
+// HEADER - Navigation & Top Bar
+// ============================================
+
+@use '../abstracts' as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  background-color: $color-bg-primary;
+  border-bottom: 1px solid $color-border-light;
+  box-shadow: $shadow-sm;
+  z-index: $z-index-sticky;
+
+  &__container {
+    @include flex-between;
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: $spacing-3 $spacing-4;
+    gap: $spacing-4;
+
+    @include respond-to(md) {
+      padding: $spacing-4 $spacing-6;
+      gap: $spacing-6;
+    }
+
+    @include respond-to(lg) {
+      padding: $spacing-4 $spacing-8;
+    }
+  }
+
+  &__logo {
+    flex-shrink: 0;
+
+    h1 {
+      margin: 0;
+      font-family: $font-display;
+      font-size: 1.125rem;
+      color: $color-primary-700;
+      white-space: nowrap;
+
+      @include respond-to(sm) {
+        font-size: 1.25rem;
+      }
+
+      @include respond-to(md) {
+        font-size: 1.5rem;
+      }
+    }
+
+    img {
+      height: 28px;
+      width: auto;
+
+      @include respond-to(sm) {
+        height: 32px;
+      }
+
+      @include respond-to(md) {
+        height: 40px;
+      }
+    }
+  }
+
+  &__nav {
+    display: none;
+
+    @include respond-to(lg) {
+      display: flex;
+      gap: $spacing-6;
+      flex: 1;
+      justify-content: center;
+    }
+  }
+
+  &__nav-link {
+    font-weight: $font-weight-medium;
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    text-decoration: none;
+    transition: color $transition-fast;
+    position: relative;
+    padding: $spacing-2 0;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: $color-primary-600;
+      transition: width $transition-base;
+    }
+
+    &:hover,
+    &--active {
+      color: $color-primary-700;
+
+      &::after {
+        width: 100%;
+      }
+    }
+  }
+
+  &__actions {
+    @include flex-end;
+    gap: $spacing-2;
+    flex-shrink: 0;
+
+    @include respond-to(sm) {
+      gap: $spacing-3;
+    }
+  }
+
+  &__auth-btn {
+    @include flex-center;
+    padding: $spacing-2 $spacing-3;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    white-space: nowrap;
+    border-radius: $radius-lg;
+    transition: all $transition-fast;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+
+    @include respond-to(sm) {
+      padding: $spacing-2 $spacing-4;
+      font-size: $font-size-sm;
+    }
+
+    @include respond-to(md) {
+      padding: $spacing-3 $spacing-5;
+      font-size: $font-size-base;
+    }
+
+    // Botón Login - Solo texto rojo
+    &.btn-link {
+      color: $color-primary-600;
+      background-color: transparent;
+      padding: $spacing-2;
+
+      @include respond-to(sm) {
+        padding: $spacing-2 $spacing-3;
+      }
+
+      &:hover {
+        color: $color-primary-700;
+        background-color: $color-primary-50;
+      }
+    }
+
+    // Botón Register - Fondo rojo sólido
+    &.btn-primary {
+      background-color: $color-primary-600;
+      color: $color-text-inverse;
+
+      &:hover {
+        background-color: $color-primary-700;
+        transform: translateY(-1px);
+        box-shadow: $shadow-sm;
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+  }
+
+  &__icon-btn {
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    color: $color-text-secondary;
+    background-color: transparent;
+    border: none;
+    border-radius: $radius-lg;
+    transition: all $transition-fast;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    @include respond-to(sm) {
+      width: 40px;
+      height: 40px;
+    }
+
+    &:hover {
+      color: $color-primary-700;
+      background-color: $color-primary-50;
+    }
+
+    &-badge {
+      @include flex-center;
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 4px;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-bold;
+      color: $color-text-inverse;
+      background-color: $color-primary-600;
+      border-radius: $radius-full;
+      border: 2px solid $color-bg-primary;
+    }
+  }
+
+  &__menu-toggle {
+    display: flex;
+
+    @include respond-to(lg) {
+      display: none;
+    }
+  }
+}

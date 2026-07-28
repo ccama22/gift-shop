@@ -1,0 +1,311 @@
+// ============================================
+// APP COMPONENT STYLES
+// ============================================
+
+@use '../styles/abstracts' as *;
+
+// Hero Section Styles
+.hero {
+  padding: $spacing-16 0;
+  background: linear-gradient(135deg, $color-rose-50 0%, $color-primary-50 100%);
+  position: relative;
+  overflow: hidden;
+
+  &__container {
+    @include grid(1, $spacing-8);
+
+    @include respond-to(lg) {
+      @include grid(2, $spacing-12);
+      align-items: center;
+    }
+  }
+
+  &__content {
+    @include flex-column;
+    gap: $spacing-6;
+  }
+
+  &__label {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wider;
+    color: $color-primary-700;
+  }
+
+  &__title {
+    @include heading($font-size-4xl, $font-weight-bold);
+    line-height: $line-height-tight;
+
+    @include respond-to(lg) {
+      font-size: $font-size-6xl;
+    }
+  }
+
+  &__title-accent {
+    color: $color-primary-700;
+    font-family: $font-display;
+    font-style: italic;
+  }
+
+  &__description {
+    @include body-text($font-size-lg);
+    line-height: $line-height-relaxed;
+    max-width: 600px;
+  }
+
+  &__actions {
+    @include flex-start;
+    gap: $spacing-4;
+    flex-wrap: wrap;
+  }
+
+  &__image {
+    position: relative;
+    border-radius: $radius-3xl;
+    overflow: hidden;
+    box-shadow: $shadow-2xl;
+
+    img {
+      @include cover-image;
+      @include aspect-ratio(4, 3);
+      transition: transform $transition-slower;
+    }
+
+    &:hover img {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// ============================================
+// PRODUCTS PAGE LAYOUT
+// ============================================
+
+.products-page {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-8;
+
+  @include respond-to(lg) {
+    grid-template-columns: 280px 1fr;
+    gap: $spacing-10;
+  }
+}
+
+// ============================================
+// FILTERS SIDEBAR
+// ============================================
+
+.filters-sidebar {
+  display: none;
+
+  @include respond-to(lg) {
+    display: block;
+  }
+}
+
+.filters-card {
+  @include card;
+  position: sticky;
+  top: calc($spacing-20);
+  padding: $spacing-6;
+}
+
+.filters-header {
+  @include flex-between;
+  margin-bottom: $spacing-6;
+  padding-bottom: $spacing-4;
+  border-bottom: 1px solid $color-border-light;
+}
+
+.filters-title {
+  @include heading($font-size-xl, $font-weight-bold);
+  margin: 0;
+}
+
+.filter-section {
+  padding: $spacing-5 0;
+  border-bottom: 1px solid $color-border-light;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__title {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wider;
+    color: $color-primary-700;
+    margin-bottom: $spacing-4;
+  }
+}
+
+// ============================================
+// PRODUCTS MAIN CONTENT
+// ============================================
+
+.products-main {
+  min-width: 0; // Fix para grid overflow
+}
+
+.products-header {
+  @include flex-between;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  margin-bottom: $spacing-8;
+  padding-bottom: $spacing-6;
+  border-bottom: 1px solid $color-border-light;
+
+  &__info {
+    h2 {
+      margin-bottom: $spacing-2;
+    }
+  }
+
+  &__controls {
+    @include flex-end;
+    gap: $spacing-3;
+    flex-wrap: wrap;
+  }
+}
+
+.filters-mobile-toggle {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  position: relative;
+
+  @include respond-to(lg) {
+    display: none;
+  }
+
+  .badge-count {
+    @include flex-center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    color: $color-text-inverse;
+    background-color: $color-primary-600;
+    border-radius: $radius-full;
+  }
+}
+
+.products-sort-select {
+  min-width: 200px;
+
+  @include respond-to-max(sm) {
+    min-width: 140px;
+    font-size: $font-size-sm;
+  }
+}
+
+// Products Grid
+.products-grid {
+  @include grid-auto-fill(260px, $spacing-6);
+
+  @include respond-to(md) {
+    @include grid-auto-fill(280px, $spacing-6);
+  }
+}
+
+// No Results Message
+.no-results {
+  @include flex-column-center;
+  grid-column: 1 / -1;
+  padding: $spacing-16 $spacing-6;
+  text-align: center;
+  color: $color-text-tertiary;
+
+  svg {
+    color: $color-neutral-300;
+  }
+}
+
+// ============================================
+// MOBILE FILTERS DRAWER
+// ============================================
+
+.filters-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all $transition-base;
+  z-index: $z-index-modal-backdrop;
+
+  &.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.filters-mobile-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+  background-color: $color-bg-primary;
+  box-shadow: $shadow-2xl;
+  transform: translateX(100%);
+  transition: transform $transition-base;
+  z-index: $z-index-modal;
+  display: flex;
+  flex-direction: column;
+
+  &.is-open {
+    transform: translateX(0);
+  }
+
+  @include respond-to(lg) {
+    display: none;
+  }
+}
+
+.filters-mobile-header {
+  @include flex-between;
+  padding: $spacing-5 $spacing-6;
+  border-bottom: 1px solid $color-border-light;
+
+  h3 {
+    margin: 0;
+  }
+
+  .btn-icon-only {
+    padding: $spacing-2;
+    color: $color-text-secondary;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: $radius-lg;
+    transition: all $transition-fast;
+
+    &:hover {
+      background-color: $color-neutral-100;
+      color: $color-text-primary;
+    }
+  }
+}
+
+.filters-mobile-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-6;
+  @include scrollbar-custom;
+}
+
+.filters-mobile-footer {
+  padding: $spacing-6;
+  border-top: 1px solid $color-border-light;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+

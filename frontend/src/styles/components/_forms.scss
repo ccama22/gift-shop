@@ -1,0 +1,408 @@
+// ============================================
+// FORMS - Input & Form Components
+// ============================================
+
+@use '../abstracts' as *;
+
+// --------------------------------------------
+// FORM GROUP
+// --------------------------------------------
+
+.form-group {
+  margin-bottom: $spacing-5;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// --------------------------------------------
+// LABELS
+// --------------------------------------------
+
+.form-label {
+  @include label;
+
+  &--required::after {
+    content: ' *';
+    color: $color-error;
+  }
+}
+
+// --------------------------------------------
+// INPUTS
+// --------------------------------------------
+
+.form-input {
+  @include input-base;
+
+  &--error {
+    border-color: $color-error;
+
+    &:focus {
+      border-color: $color-error;
+      box-shadow: 0 0 0 3px rgba($color-error, 0.1);
+    }
+  }
+
+  &--success {
+    border-color: $color-success;
+
+    &:focus {
+      border-color: $color-success;
+      box-shadow: 0 0 0 3px rgba($color-success, 0.1);
+    }
+  }
+
+  &--with-icon {
+    padding-left: $spacing-10;
+  }
+}
+
+// --------------------------------------------
+// TEXTAREA
+// --------------------------------------------
+
+.form-textarea {
+  @include input-base;
+  min-height: 120px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+// --------------------------------------------
+// SELECT
+// --------------------------------------------
+
+.form-select {
+  @include input-base;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right $spacing-3 center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  padding-right: $spacing-10;
+  cursor: pointer;
+}
+
+// --------------------------------------------
+// INPUT WITH ICON
+// --------------------------------------------
+
+.form-input-wrapper {
+  position: relative;
+
+  &__icon {
+    @include flex-center;
+    position: absolute;
+    left: $spacing-3;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-text-tertiary;
+    pointer-events: none;
+
+    &--right {
+      left: auto;
+      right: $spacing-3;
+    }
+  }
+
+  &--icon-left .form-input {
+    padding-left: $spacing-10;
+  }
+
+  &--icon-right .form-input {
+    padding-right: $spacing-10;
+  }
+}
+
+// --------------------------------------------
+// CHECKBOX & RADIO
+// --------------------------------------------
+
+.form-checkbox,
+.form-radio {
+  @include sr-only;
+
+  & + label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-3;
+    cursor: pointer;
+    user-select: none;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      border: 2px solid $color-border-medium;
+      background-color: $color-bg-primary;
+      transition: all $transition-fast;
+    }
+
+    &:hover::before {
+      border-color: $color-primary-500;
+    }
+  }
+
+  &:checked + label::before {
+    background-color: $color-primary-600;
+    border-color: $color-primary-600;
+  }
+
+  &:checked + label::after {
+    content: '';
+    position: absolute;
+  }
+
+  &:focus-visible + label::before {
+    @include focus-ring;
+  }
+
+  &:disabled + label {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.form-checkbox + label {
+  &::before {
+    border-radius: $radius-sm;
+  }
+
+  &::after {
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+  }
+}
+
+.form-radio + label {
+  &::before {
+    border-radius: $radius-full;
+  }
+
+  &::after {
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: $radius-full;
+  }
+}
+
+// --------------------------------------------
+// SWITCH / TOGGLE
+// --------------------------------------------
+
+.form-switch {
+  @include sr-only;
+
+  & + label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-3;
+    cursor: pointer;
+    user-select: none;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+      background-color: $color-neutral-300;
+      border-radius: $radius-full;
+      transition: all $transition-fast;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      background-color: white;
+      border-radius: $radius-full;
+      box-shadow: $shadow-sm;
+      transition: all $transition-fast;
+    }
+  }
+
+  &:checked + label::before {
+    background-color: $color-primary-600;
+  }
+
+  &:checked + label::after {
+    left: 22px;
+  }
+
+  &:focus-visible + label::before {
+    @include focus-ring;
+  }
+
+  &:disabled + label {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// --------------------------------------------
+// FORM VALIDATION FEEDBACK
+// --------------------------------------------
+
+.form-feedback {
+  display: block;
+  margin-top: $spacing-2;
+  font-size: $font-size-sm;
+
+  &--error {
+    color: $color-error;
+  }
+
+  &--success {
+    color: $color-success;
+  }
+
+  &--info {
+    color: $color-text-tertiary;
+  }
+}
+
+// --------------------------------------------
+// SEARCH INPUT
+// --------------------------------------------
+
+.search-input {
+  @include input-base;
+  padding-left: $spacing-10;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z'/%3E%3C/svg%3E");
+  background-position: left $spacing-3 center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+
+  &--large {
+    padding: $spacing-4 $spacing-4 $spacing-4 $spacing-12;
+    font-size: $font-size-lg;
+    border-radius: $radius-2xl;
+  }
+}
+
+// --------------------------------------------
+// RANGE SLIDER
+// --------------------------------------------
+
+.form-range {
+  width: 100%;
+  height: 6px;
+  appearance: none;
+  background: transparent;
+  outline: none;
+
+  &::-webkit-slider-track {
+    height: 6px;
+    background: $color-neutral-200;
+    border-radius: $radius-full;
+  }
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: $color-primary-600;
+    border-radius: $radius-full;
+    border: 3px solid white;
+    box-shadow: $shadow-md;
+    cursor: pointer;
+    margin-top: -7px;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &::-moz-range-track {
+    height: 6px;
+    background: $color-neutral-200;
+    border-radius: $radius-full;
+  }
+
+  &::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: $color-primary-600;
+    border-radius: $radius-full;
+    border: 3px solid white;
+    box-shadow: $shadow-md;
+    cursor: pointer;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
+
+// --------------------------------------------
+// FILE UPLOAD
+// --------------------------------------------
+
+.form-file {
+  @include sr-only;
+
+  & + label {
+    @include button-secondary;
+    cursor: pointer;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+.file-upload-area {
+  @include flex-column-center;
+  gap: $spacing-3;
+  padding: $spacing-10;
+  border: 2px dashed $color-border-medium;
+  border-radius: $radius-xl;
+  text-align: center;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &:hover {
+    border-color: $color-primary-500;
+    background-color: $color-primary-50;
+  }
+
+  &--active {
+    border-color: $color-primary-600;
+    background-color: $color-primary-100;
+  }
+
+  &__icon {
+    font-size: $font-size-4xl;
+    color: $color-text-tertiary;
+  }
+
+  &__text {
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+  }
+
+  &__hint {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}

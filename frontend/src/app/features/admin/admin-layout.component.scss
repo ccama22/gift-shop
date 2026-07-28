@@ -1,0 +1,1125 @@
+// ============================================
+// ADMIN INVENTORY - MOBILE FIRST RESPONSIVE
+// ============================================
+
+// Variables
+$primary: #D63447;
+$primary-hover: #B02545;
+$secondary: #F57B51;
+$tertiary: #D4A373;
+$neutral: #887271;
+$font-heading: 'Playfair Display', serif;
+$font-body: 'Montserrat', sans-serif;
+
+// Breakpoints
+$mobile: 320px;
+$tablet: 768px;
+$desktop: 1024px;
+$wide: 1440px;
+
+// ============================================
+// LAYOUT BASE - MOBILE FIRST (320px+)
+// ============================================
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #FAF3F1;
+  font-family: $font-body;
+  position: relative;
+}
+
+// ============================================
+// SIDEBAR OVERLAY (Móvil)
+// ============================================
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  
+  &--visible {
+    display: block;
+    opacity: 1;
+  }
+}
+
+// ============================================
+// MOBILE MENU BUTTON
+// ============================================
+.mobile-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: white;
+  border: 1px solid #EEDDD9;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  color: $primary;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+  
+  &:hover {
+    background: #FFF5F7;
+    border-color: $primary;
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ============================================
+// SIDEBAR - MOBILE FIRST
+// ============================================
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: #FBF7F5;
+  border-right: 1px solid #F0E6E3;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.02);
+  z-index: 999;
+  transition: left 0.3s ease;
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  &--open {
+    left: 0;
+  }
+
+  &__header {
+    padding: 0 1rem 1rem;
+    border-bottom: 1px solid #F0E6E3;
+  }
+
+  &__brand {
+    font-family: $font-heading;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1A1A1A;
+
+    span {
+      font-style: italic;
+      color: $primary;
+    }
+  }
+
+  &__subtitle {
+    font-size: 0.7rem;
+    color: #A08E90;
+    margin: 0.25rem 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+
+  &__nav {
+    flex: 1;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: #8B7A7C;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #F5EEEC;
+      color: #5A4A4D;
+    }
+
+    &--active {
+      background: linear-gradient(135deg, $primary 0%, $primary-hover 100%);
+      color: white;
+      border-radius: 0.75rem;
+      margin: 0 0.5rem;
+
+      &:hover {
+        background: linear-gradient(135deg, $primary-hover 0%, $primary 100%);
+      }
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__footer {
+    padding: 1rem 0 0;
+    border-top: 1px solid #F0E6E3;
+  }
+
+  &__user {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin: 1rem 0.5rem 0;
+    background: #F5EEEC;
+    border-radius: 0.5rem;
+  }
+
+  &__user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, $primary 0%, $primary-hover 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  &__user-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__user-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1A1A1A;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__user-role {
+    font-size: 0.625rem;
+    color: #A08E90;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+}
+
+// ============================================
+// MAIN CONTENT - MOBILE FIRST
+// ============================================
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh; // Cambio a min-height para permitir crecimiento
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #FAF3F1;
+  -webkit-overflow-scrolling: touch; // Scroll suave en iOS
+  
+  // ============================================
+  // SCROLLBAR AUTO-HIDE CON OVERLAY (Solo para product-form)
+  // ============================================
+  
+  // Scrollbar WebKit (Chrome, Safari, Edge)
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent; // Invisible por defecto
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: transparent; // Invisible por defecto
+    border-radius: 4px;
+    transition: background 0.3s ease;
+  }
+  
+  // Al hacer hover sobre el contenido, la scrollbar aparece sutilmente
+  &:hover::-webkit-scrollbar-thumb {
+    background: rgba(238, 221, 217, 0.5); // Semi-transparente elegante
+  }
+  
+  // Al hacer hover directo sobre la scrollbar, se oscurece
+  &::-webkit-scrollbar-thumb:hover {
+    background: #D4A373; // Color dorado/terciario
+  }
+  
+  // Durante el scroll activo, la scrollbar es visible
+  &::-webkit-scrollbar-thumb:active {
+    background: #C7936A; // Más oscuro al arrastrar
+  }
+  
+  // Para Firefox (overlay auto-hide)
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  
+  &:hover {
+    scrollbar-color: rgba(238, 221, 217, 0.5) transparent;
+  }
+}
+
+// ============================================
+// CONTENT HEADER - MOBILE
+// ============================================
+.content-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: #A67C6D;
+    font-weight: 500;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1A1A1A;
+    line-height: 1.2;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+}
+
+// ============================================
+// BUTTONS - MOBILE OPTIMIZED
+// ============================================
+.btn-outline,
+.btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 44px; // Touch-friendly
+  
+  svg {
+    flex-shrink: 0;
+  }
+  
+  // Ocultar texto en móvil muy pequeño
+  .btn-text {
+    display: none;
+  }
+  
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.btn-outline {
+  background: white;
+  border: 1px solid #EEDDD9;
+  color: $neutral;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+    background: #FFF5F7;
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $primary 0%, $primary-hover 100%);
+  border: none;
+  color: white;
+
+  &:hover {
+    background: linear-gradient(135deg, $primary-hover 0%, $primary 100%);
+    transform: translateY(-1px);
+  }
+}
+
+// ============================================
+// STATS GRID - MOBILE FIRST
+// ============================================
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 2px 8px rgba(214, 52, 71, 0.08);
+  border: 1px solid #F5E8E5;
+
+  &__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  &--primary &__icon {
+    background: linear-gradient(135deg, rgba(214, 52, 71, 0.1) 0%, rgba(214, 52, 71, 0.15) 100%);
+    color: $primary;
+  }
+
+  &--success &__icon {
+    background: linear-gradient(135deg, rgba(245, 123, 81, 0.1) 0%, rgba(245, 123, 81, 0.15) 100%);
+    color: $secondary;
+  }
+
+  &--warning &__icon {
+    background: linear-gradient(135deg, rgba(212, 163, 115, 0.1) 0%, rgba(212, 163, 115, 0.15) 100%);
+    color: $tertiary;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    color: #6B7280;
+    font-weight: 500;
+  }
+
+  &__value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1A1A1A;
+  }
+}
+
+// ============================================
+// TOOLBAR & SEARCH - MOBILE
+// ============================================
+.toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  
+  &__filter-select {
+    width: 100%;
+  }
+}
+
+.search-box {
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  svg {
+    position: absolute;
+    left: 1rem;
+    color: #9CA3AF;
+    pointer-events: none;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 3rem;
+    border: 1px solid #EEDDD9;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    background: white;
+    min-height: 44px; // Touch-friendly
+
+    &:focus {
+      outline: none;
+      border-color: $primary;
+      box-shadow: 0 0 0 3px rgba(214, 52, 71, 0.1);
+    }
+
+    &::placeholder {
+      color: #9CA3AF;
+    }
+  }
+}
+
+// ============================================
+// PRODUCTS TABLE - MOBILE (Card View)
+// ============================================
+.products-table {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(214, 52, 71, 0.08);
+  border: 1px solid #F5E8E5;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: visible; // Sin scroll en móvil
+  -webkit-overflow-scrolling: touch;
+  
+  // Estilos para la scrollbar (solo visibles en tablet+)
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #F7F2F0;
+    border-radius: 0 0 1rem 1rem;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #EEDDD9;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #D4A373;
+    }
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: auto; // Sin ancho mínimo en móvil
+  margin: 0;
+  
+  // Ocultar thead en móvil
+  thead {
+    display: none;
+  }
+  
+  // tbody visible pero con rows como cards
+  tbody {
+    display: block;
+  }
+}
+
+// Vista de Cards para móvil
+.table__row {
+  display: block;
+  padding: 1rem;
+  border-bottom: 1px solid #F7F2F0;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+  
+  &:active {
+    background: #FDF9F7;
+  }
+}
+
+.table__td {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  border: none;
+  
+  &:first-child {
+    display: none !important; // Checkbox oculto en móvil
+  }
+  
+  // Estructura de card
+  &:nth-child(2) { // Producto
+    margin-bottom: 0.75rem;
+  }
+  
+  &:nth-child(3)::before { content: "Código: "; font-weight: 600; color: #6B5E60; }
+  &:nth-child(4)::before { content: "Categoría: "; font-weight: 600; color: #6B5E60; }
+  &:nth-child(5)::before { content: "Precio: "; font-weight: 600; color: #6B5E60; }
+  &:nth-child(6)::before { content: "Stock: "; font-weight: 600; color: #6B5E60; }
+  &:nth-child(7) { // Estado
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    
+    &::before { content: "Estado: "; font-weight: 600; color: #6B5E60; }
+  }
+  &:nth-child(8) { // Acciones
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #F7F2F0;
+  }
+}
+
+.table__th {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #5A4A4D;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #F5E8E5;
+  background: #FDF3F1;
+  white-space: nowrap; // Evitar wrap en headers
+}
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 200px; // Ancho mínimo para la celda de producto
+
+  &__img {
+    width: 56px;
+    height: 56px;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-weight: 600;
+    color: #1A1A1A;
+    font-size: 1rem;
+    white-space: normal; // Permitir wrap en nombre de producto
+  }
+}
+
+.code-badge {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  background: linear-gradient(135deg, #FFF5F7 0%, #FFE8EC 100%);
+  color: $primary;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.375rem;
+  font-family: 'Courier New', monospace;
+  border: 1px solid #FFE8EC;
+  white-space: nowrap; // Evitar wrap en códigos
+}
+
+.price-text {
+  font-weight: 600;
+  color: #1A1A1A;
+  white-space: nowrap; // Evitar wrap en precios
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E5E7EB;
+    transition: 0.3s;
+    border-radius: 24px;
+    
+    &::before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+  }
+  
+  input:checked + &__slider {
+    background-color: $primary;
+  }
+  
+  input:checked + &__slider::before {
+    transform: translateX(20px);
+  }
+}
+
+.status-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6B7280;
+
+  &--active {
+    color: $primary;
+    font-weight: 600;
+  }
+}
+
+.actions-menu {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn {
+  flex: 1;
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #FFE8EC;
+  background: white;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6B7280;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+    background: #FFF5F7;
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// ============================================
+// TABLE FOOTER & PAGINATION
+// ============================================
+.table-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border-top: 1px solid #FFE8EC;
+
+  &__info {
+    font-size: 0.875rem;
+    color: #6B7280;
+    text-align: center;
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &__btn,
+  &__page {
+    min-width: 40px;
+    min-height: 40px;
+    border: 1px solid #FFE8EC;
+    background: white;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+
+    &:hover {
+      border-color: $primary;
+      color: $primary;
+      background: #FFF5F7;
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  &__page--active {
+    background: linear-gradient(135deg, $primary 0%, $primary-hover 100%);
+    border-color: $primary;
+    color: white;
+
+    &:hover {
+      background: linear-gradient(135deg, $primary-hover 0%, $primary 100%);
+    }
+  }
+
+  &__dots {
+    padding: 0 0.5rem;
+    color: #9CA3AF;
+    display: flex;
+    align-items: center;
+  }
+}
+
+// ============================================
+// ADMIN FOOTER - MOBILE
+// ============================================
+.admin-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  border-top: 1px solid #EDD9D6;
+  margin-top: auto;
+  text-align: center;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__brand {
+    font-family: $font-heading;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1A1A1A;
+
+    span {
+      font-style: italic;
+      color: $primary;
+    }
+  }
+
+  &__copy {
+    font-size: 0.75rem;
+    color: #6B7280;
+  }
+
+  &__links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+
+    a {
+      font-size: 0.875rem;
+      color: #6B7280;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      font-weight: 500;
+
+      &:hover {
+        color: $primary;
+      }
+    }
+  }
+}
+
+// ============================================
+// TABLET (768px+)
+// ============================================
+@media (min-width: $tablet) {
+  .mobile-menu-btn {
+    display: none;
+  }
+  
+  .sidebar-overlay {
+    display: none !important;
+  }
+  
+  .sidebar {
+    position: static;
+    width: 260px;
+    left: 0;
+  }
+  
+  .admin-layout {
+    flex-direction: row;
+  }
+  
+  .main-content {
+    // El padding lo maneja cada componente hijo
+  }
+  
+  .content-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    
+    &__title {
+      font-size: 1.75rem;
+    }
+  }
+  
+  .btn-outline .btn-text,
+  .btn-primary .btn-text {
+    display: inline;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .toolbar {
+    flex-direction: row;
+    align-items: center;
+    
+    &__filter-select {
+      width: auto;
+      min-width: 200px;
+    }
+  }
+  
+  // Tabla con scroll horizontal SOLO en tablets
+  .table-container {
+    overflow-x: auto; // Activar scroll horizontal en tablet+
+    padding: 0;
+    margin: 0;
+  }
+  
+  // Mostrar tabla correctamente en tablet+
+  .table {
+    border-collapse: collapse;
+    min-width: 1000px; // Ancho mínimo en tablet+ para forzar scroll
+    margin: 0;
+    padding: 0;
+    
+    thead {
+      display: table-header-group;
+    }
+    
+    tbody {
+      display: table-row-group;
+    }
+    
+    &__th {
+      display: table-cell;
+      padding: 1rem 1.5rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #5A4A4D;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid #F5E8E5;
+      background: #FDF3F1;
+      white-space: nowrap;
+      
+      &:first-child {
+        padding-left: 1.5rem; // Primera columna con padding normal
+      }
+    }
+    
+    &__row {
+      display: table-row !important;
+      padding: 0 !important;
+      border-bottom: none;
+      margin: 0;
+      
+      &:hover {
+        background: #FDF9F7;
+      }
+      
+      &:active {
+        background: #FDF9F7;
+      }
+    }
+    
+    &__td {
+      display: table-cell !important;
+      padding: 1rem 1.5rem !important;
+      border-bottom: 1px solid #F7F2F0;
+      border-top: none;
+      vertical-align: middle;
+      margin: 0;
+      
+      // Solo nowrap en columnas pequeñas
+      &:nth-child(3), // Código
+      &:nth-child(5), // Precio
+      &:nth-child(6)  // Stock
+      {
+        white-space: nowrap;
+      }
+      
+      &:first-child {
+        display: table-cell !important;
+        padding-left: 1.5rem !important;
+        width: 40px; // Ancho fijo para checkbox
+      }
+      
+      // Remover todos los ::before de mobile
+      &::before {
+        content: none !important;
+        display: none !important;
+      }
+      
+      // Remover estilos de card
+      &:nth-child(2) {
+        margin-bottom: 0;
+        min-width: 250px; // Ancho mínimo para producto
+      }
+      
+      &:nth-child(4) { // Categoría
+        min-width: 150px;
+      }
+      
+      &:nth-child(7) {
+        display: table-cell !important;
+        margin-top: 0;
+        border-top: none;
+        min-width: 120px;
+      }
+      
+      &:nth-child(8) {
+        display: table-cell !important;
+        margin-top: 0;
+        padding-top: 1rem !important;
+        border-top: none;
+        min-width: 100px;
+      }
+    }
+  }
+  
+  .action-btn {
+    flex: initial;
+    width: 36px;
+    height: 36px;
+    min-width: auto;
+    min-height: auto;
+  }
+  
+  .table-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    &__info {
+      text-align: left;
+    }
+  }
+  
+  .pagination {
+    justify-content: flex-end;
+  }
+  
+  .admin-footer {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    
+    &__left {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    &__copy {
+      font-size: 0.875rem;
+    }
+    
+    &__links {
+      gap: 1.5rem;
+    }
+  }
+}
+
+// ============================================
+// DESKTOP (1024px+)
+// ============================================
+@media (min-width: $desktop) {
+  .main-content {
+    // El padding lo maneja cada componente hijo
+  }
+  
+  .content-header__title {
+    font-size: 2rem;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .stat-card {
+    padding: 1.5rem;
+    
+    &__icon {
+      width: 56px;
+      height: 56px;
+    }
+    
+    &__value {
+      font-size: 2rem;
+    }
+  }
+  
+  // En desktop, la tabla debe caber sin scroll
+  .table {
+    min-width: 100%; // Resetear el min-width
+  }
+}
+
+// ============================================
+// WIDE SCREENS (1440px+)
+// ============================================
+@media (min-width: $wide) {
+  .sidebar {
+    width: 280px;
+  }
+  
+  .stats-grid {
+    gap: 2rem;
+  }
+}
+
+// ============================================
+// ANIMATIONS
+// ============================================
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,129 @@
+// ============================================
+// MAIN STYLESHEET - Gift Shop Frontend
+// ============================================
+// This is the main entry point for all styles
+// Import order matters: abstracts → base → components → layout → utilities
+
+// --------------------------------------------
+// 1. ABSTRACTS - Variables, Functions, Mixins
+// --------------------------------------------
+// No CSS output, just tools for other files
+@use './styles/abstracts' as *;
+
+// --------------------------------------------
+// 2. BASE - Reset, Typography, Animations
+// --------------------------------------------
+// Global styles and resets
+@use './styles/base';
+
+// --------------------------------------------
+// 3. LAYOUT - Header, Footer, Navigation
+// --------------------------------------------
+// Layout-specific components
+@use './styles/layout';
+
+// --------------------------------------------
+// 4. COMPONENTS - Buttons, Cards, Forms
+// --------------------------------------------
+// Reusable UI components
+@use './styles/components';
+
+// --------------------------------------------
+// 5. UTILITIES - Spacing, Display helpers
+// --------------------------------------------
+// Utility classes for quick styling
+@use './styles/utilities';
+
+// --------------------------------------------
+// 6. GLOBAL OVERRIDES & SHARED ADMIN STYLES
+// --------------------------------------------
+.btn-primary {
+  background: linear-gradient(135deg, #D63447 0%, #B02545 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(214, 52, 71, 0.3);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(214, 52, 71, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-outline {
+  background: white;
+  color: #D63447;
+  border: 1px solid #FFE8EC;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:hover {
+    border-color: #D63447;
+    background: #FFF5F7;
+    transform: translateY(-1px);
+  }
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  margin-right: 0.5rem;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .toggle__slider {
+      background: linear-gradient(135deg, #D63447 0%, #B02545 100%);
+
+      &:before {
+        transform: translateX(20px);
+      }
+    }
+  }
+
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    inset: 0;
+    background-color: #CBD5E1;
+    transition: 0.3s;
+    border-radius: 24px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+

@@ -1,0 +1,409 @@
+// ============================================
+// CARDS - Product & Content Cards
+// ============================================
+
+@use '../abstracts' as *;
+
+// --------------------------------------------
+// BASE CARD
+// --------------------------------------------
+
+.card {
+  @include card;
+
+  &__header {
+    margin-bottom: $spacing-4;
+  }
+
+  &__title {
+    @include heading($font-size-lg, $font-weight-semibold);
+    margin-bottom: $spacing-2;
+  }
+
+  &__subtitle {
+    @include body-text($font-size-sm);
+    color: $color-text-tertiary;
+  }
+
+  &__body {
+    margin-bottom: $spacing-4;
+  }
+
+  &__footer {
+    padding-top: $spacing-4;
+    border-top: 1px solid $color-border-light;
+  }
+
+  &--hover {
+    @include card-hover;
+  }
+
+  &--bordered {
+    border: 1px solid $color-border-light;
+    box-shadow: none;
+
+    &:hover {
+      border-color: $color-border-medium;
+    }
+  }
+}
+
+// --------------------------------------------
+// PRODUCT CARD
+// --------------------------------------------
+
+.product-card {
+  @include card-product;
+  position: relative;
+  overflow: hidden;
+
+  // Image container
+  &__image-wrapper {
+    position: relative;
+    @include aspect-ratio(1, 1);
+    overflow: hidden;
+    background-color: $color-neutral-100;
+  }
+
+  &__image {
+    @include cover-image;
+    transition: transform $transition-slow;
+  }
+
+  // Badge (BEST SELLER, NEW, etc.)
+  &__badge {
+    position: absolute;
+    top: $spacing-3;
+    left: $spacing-3;
+    padding: $spacing-1 $spacing-3;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wide;
+    background-color: $color-primary-700;
+    color: $color-text-inverse;
+    border-radius: $radius-full;
+    z-index: 2;
+
+    &--sale {
+      background-color: $color-error;
+    }
+
+    &--new {
+      background-color: $color-success;
+    }
+  }
+
+  // Action buttons overlay
+  &__actions {
+    position: absolute;
+    top: $spacing-3;
+    right: $spacing-3;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all $transition-base;
+    z-index: 2;
+  }
+
+  // Quick view button
+  &__quick-view {
+    position: absolute;
+    bottom: $spacing-3;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    opacity: 0;
+    transition: all $transition-base;
+    z-index: 2;
+  }
+
+  // Content
+  &__content {
+    padding: $spacing-5;
+  }
+
+  &__category {
+    @include body-text($font-size-xs);
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wider;
+    color: $color-text-tertiary;
+    margin-bottom: $spacing-2;
+  }
+
+  &__title {
+    @include heading($font-size-base, $font-weight-medium);
+    margin-bottom: $spacing-2;
+    @include line-clamp(2);
+    min-height: 3em; // Ensure consistent height
+  }
+
+  &__description {
+    @include body-text($font-size-sm);
+    @include line-clamp(2);
+    margin-bottom: $spacing-3;
+    color: $color-text-tertiary;
+  }
+
+  // Rating
+  &__rating {
+    @include flex-start;
+    gap: $spacing-1;
+    margin-bottom: $spacing-3;
+
+    &-stars {
+      display: flex;
+      gap: $spacing-1;
+      color: $color-warning;
+    }
+
+    &-count {
+      font-size: $font-size-xs;
+      color: $color-text-tertiary;
+      margin-left: $spacing-1;
+    }
+  }
+
+  // Price
+  &__price-wrapper {
+    @include flex-between;
+    align-items: baseline;
+    margin-bottom: $spacing-4;
+  }
+
+  &__price {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+
+    &--sale {
+      color: $color-error;
+    }
+  }
+
+  &__price-original {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+    text-decoration: line-through;
+    margin-left: $spacing-2;
+  }
+
+  // Add to cart button
+  &__add-to-cart {
+    width: 100%;
+  }
+
+  // Hover effects
+  &:hover {
+    .product-card__image {
+      transform: scale(1.08);
+    }
+
+    .product-card__actions {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .product-card__quick-view {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  // Out of stock
+  &--out-of-stock {
+    .product-card__image-wrapper::after {
+      @include absolute-center;
+      content: 'Out of Stock';
+      padding: $spacing-3 $spacing-6;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+      color: $color-text-inverse;
+      background-color: rgba($color-neutral-900, 0.8);
+      border-radius: $radius-lg;
+      z-index: 2;
+    }
+
+    .product-card__add-to-cart {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+}
+
+// --------------------------------------------
+// FEATURED PRODUCT CARD (Horizontal)
+// --------------------------------------------
+
+.featured-card {
+  @include card;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $spacing-6;
+  padding: 0;
+  overflow: hidden;
+
+  @include respond-to(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &__image-wrapper {
+    position: relative;
+    @include aspect-ratio(4, 3);
+    overflow: hidden;
+
+    @include respond-to(md) {
+      aspect-ratio: auto;
+    }
+  }
+
+  &__image {
+    @include cover-image;
+  }
+
+  &__content {
+    padding: $spacing-6;
+    @include flex-column;
+    justify-content: center;
+  }
+
+  &__category {
+    @include body-text($font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wider;
+    color: $color-primary-600;
+    margin-bottom: $spacing-2;
+  }
+
+  &__title {
+    @include heading($font-size-3xl, $font-weight-bold);
+    margin-bottom: $spacing-4;
+  }
+
+  &__description {
+    @include body-text($font-size-base);
+    margin-bottom: $spacing-6;
+  }
+
+  &__price {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary-700;
+    margin-bottom: $spacing-6;
+  }
+}
+
+// --------------------------------------------
+// COLLECTION CARD
+// --------------------------------------------
+
+.collection-card {
+  position: relative;
+  @include aspect-ratio(16, 9);
+  overflow: hidden;
+  border-radius: $radius-2xl;
+  cursor: pointer;
+  transition: all $transition-base;
+
+  &__image {
+    @include cover-image;
+    transition: transform $transition-slower;
+  }
+
+  &__overlay {
+    @include absolute-center;
+    width: 100%;
+    text-align: center;
+    padding: $spacing-6;
+    z-index: 2;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.6)
+    );
+    transition: opacity $transition-base;
+    z-index: 1;
+  }
+
+  &__title {
+    @include heading($font-size-2xl, $font-weight-bold);
+    color: $color-text-inverse;
+    margin-bottom: $spacing-2;
+  }
+
+  &__subtitle {
+    @include body-text($font-size-base);
+    color: alpha($color-text-inverse, 0.9);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-2xl;
+
+    .collection-card__image {
+      transform: scale(1.1);
+    }
+
+    &::before {
+      opacity: 0.8;
+    }
+  }
+}
+
+// --------------------------------------------
+// TESTIMONIAL CARD
+// --------------------------------------------
+
+.testimonial-card {
+  @include card;
+  position: relative;
+  padding: $spacing-8;
+  text-align: center;
+
+  &__quote {
+    font-size: $font-size-lg;
+    font-style: italic;
+    line-height: $line-height-relaxed;
+    color: $color-text-secondary;
+    margin-bottom: $spacing-6;
+
+    &::before {
+      content: '"';
+      font-size: $font-size-4xl;
+      color: $color-primary-200;
+      font-family: $font-display;
+      display: block;
+      margin-bottom: -$spacing-6;
+    }
+  }
+
+  &__author {
+    @include flex-column-center;
+    gap: $spacing-3;
+  }
+
+  &__avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: $radius-full;
+    object-fit: cover;
+    border: 3px solid $color-primary-100;
+  }
+
+  &__name {
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+  }
+
+  &__role {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+}

@@ -1,0 +1,365 @@
+// ============================================
+// TYPOGRAPHY - Global Text Styles
+// ============================================
+
+@use '../abstracts' as *;
+
+// --------------------------------------------
+// HEADING STYLES
+// --------------------------------------------
+
+.h1,
+h1 {
+  @include heading($font-size-4xl, $font-weight-bold);
+  margin-bottom: $spacing-6;
+
+  @include respond-to(md) {
+    font-size: $font-size-5xl;
+  }
+
+  @include respond-to(lg) {
+    font-size: $font-size-6xl;
+  }
+}
+
+.h2,
+h2 {
+  @include heading($font-size-3xl, $font-weight-bold);
+  margin-bottom: $spacing-5;
+
+  @include respond-to(md) {
+    font-size: $font-size-4xl;
+  }
+}
+
+.h3,
+h3 {
+  @include heading($font-size-2xl, $font-weight-semibold);
+  margin-bottom: $spacing-4;
+
+  @include respond-to(md) {
+    font-size: $font-size-3xl;
+  }
+}
+
+.h4,
+h4 {
+  @include heading($font-size-xl, $font-weight-semibold);
+  margin-bottom: $spacing-4;
+
+  @include respond-to(md) {
+    font-size: $font-size-2xl;
+  }
+}
+
+.h5,
+h5 {
+  @include heading($font-size-lg, $font-weight-medium);
+  margin-bottom: $spacing-3;
+
+  @include respond-to(md) {
+    font-size: $font-size-xl;
+  }
+}
+
+.h6,
+h6 {
+  @include heading($font-size-base, $font-weight-medium);
+  margin-bottom: $spacing-3;
+
+  @include respond-to(md) {
+    font-size: $font-size-lg;
+  }
+}
+
+// --------------------------------------------
+// DISPLAY HEADINGS (Extra Large)
+// --------------------------------------------
+
+.display-1 {
+  @include heading($font-size-5xl, $font-weight-extrabold);
+  letter-spacing: $letter-spacing-tight;
+
+  @include respond-to(lg) {
+    font-size: 5rem; // 80px
+  }
+}
+
+.display-2 {
+  @include heading($font-size-4xl, $font-weight-extrabold);
+  letter-spacing: $letter-spacing-tight;
+
+  @include respond-to(lg) {
+    font-size: 4.5rem; // 72px
+  }
+}
+
+// --------------------------------------------
+// BODY TEXT
+// --------------------------------------------
+
+p {
+  @include body-text;
+  margin-bottom: $spacing-4;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.lead {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-relaxed;
+  color: $color-text-secondary;
+
+  @include respond-to(md) {
+    font-size: $font-size-xl;
+  }
+}
+
+.text-small {
+  font-size: $font-size-sm;
+}
+
+.text-xs {
+  font-size: $font-size-xs;
+}
+
+// --------------------------------------------
+// TEXT COLORS
+// --------------------------------------------
+
+.text-primary {
+  color: $color-text-primary;
+}
+
+.text-secondary {
+  color: $color-text-secondary;
+}
+
+.text-tertiary {
+  color: $color-text-tertiary;
+}
+
+.text-accent {
+  color: $color-text-accent;
+}
+
+.text-inverse {
+  color: $color-text-inverse;
+}
+
+.text-success {
+  color: $color-success;
+}
+
+.text-warning {
+  color: $color-warning;
+}
+
+.text-error {
+  color: $color-error;
+}
+
+// --------------------------------------------
+// TEXT WEIGHTS
+// --------------------------------------------
+
+.font-light {
+  font-weight: $font-weight-light;
+}
+
+.font-normal {
+  font-weight: $font-weight-normal;
+}
+
+.font-medium {
+  font-weight: $font-weight-medium;
+}
+
+.font-semibold {
+  font-weight: $font-weight-semibold;
+}
+
+.font-bold {
+  font-weight: $font-weight-bold;
+}
+
+// --------------------------------------------
+// TEXT STYLES
+// --------------------------------------------
+
+.italic {
+  font-style: italic;
+}
+
+.uppercase {
+  text-transform: uppercase;
+  letter-spacing: $letter-spacing-wide;
+}
+
+.lowercase {
+  text-transform: lowercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.underline {
+  text-decoration: underline;
+}
+
+// --------------------------------------------
+// TEXT ALIGNMENT
+// --------------------------------------------
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+// --------------------------------------------
+// TEXT UTILITIES
+// --------------------------------------------
+
+.text-ellipsis {
+  @include text-ellipsis;
+}
+
+.line-clamp-1 {
+  @include line-clamp(1);
+}
+
+.line-clamp-2 {
+  @include line-clamp(2);
+}
+
+.line-clamp-3 {
+  @include line-clamp(3);
+}
+
+// --------------------------------------------
+// SPECIAL TEXT ELEMENTS
+// --------------------------------------------
+
+blockquote {
+  position: relative;
+  padding: $spacing-6;
+  margin: $spacing-8 0;
+  font-size: $font-size-lg;
+  font-style: italic;
+  color: $color-text-secondary;
+  border-left: 4px solid $color-primary-500;
+  background-color: $color-bg-secondary;
+  border-radius: $radius-lg;
+
+  cite {
+    display: block;
+    margin-top: $spacing-4;
+    font-size: $font-size-sm;
+    font-style: normal;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+
+    &::before {
+      content: '— ';
+    }
+  }
+}
+
+code {
+  padding: $spacing-1 $spacing-2;
+  font-family: $font-mono;
+  font-size: 0.875em;
+  color: $color-primary-700;
+  background-color: $color-primary-50;
+  border-radius: $radius-sm;
+}
+
+pre {
+  padding: $spacing-6;
+  margin: $spacing-6 0;
+  overflow-x: auto;
+  background-color: $color-neutral-900;
+  border-radius: $radius-lg;
+
+  code {
+    padding: 0;
+    color: $color-text-inverse;
+    background-color: transparent;
+  }
+}
+
+strong,
+b {
+  font-weight: $font-weight-bold;
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+small {
+  font-size: $font-size-sm;
+}
+
+mark {
+  padding: $spacing-1;
+  background-color: alpha($color-warning, 0.3);
+  border-radius: $radius-sm;
+}
+
+// --------------------------------------------
+// LINKS
+// --------------------------------------------
+
+a {
+  color: $color-primary-700;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-primary-800;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.link-primary {
+  color: $color-primary-700;
+  font-weight: $font-weight-medium;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: $color-primary-800;
+  }
+}
+
+.link-subtle {
+  color: $color-text-secondary;
+
+  &:hover {
+    color: $color-text-primary;
+  }
+}

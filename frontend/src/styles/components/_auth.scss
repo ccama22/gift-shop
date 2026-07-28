@@ -1,0 +1,455 @@
+// ============================================
+// AUTH COMPONENTS - Shared Styles
+// ============================================
+
+@use '../abstracts' as *;
+
+// ============================================
+// AUTH LAYOUT
+// ============================================
+
+.auth-layout {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 1fr;
+  background-color: $color-bg-secondary;
+
+  @include respond-to(lg) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &__image {
+    position: relative;
+    display: none;
+    overflow: hidden;
+
+    @include respond-to(lg) {
+      display: block;
+    }
+  }
+
+  &__image-overlay {
+    position: absolute;
+    inset: 0;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba($color-primary-900, 0.7) 0%,
+        rgba($color-primary-700, 0.5) 100%
+      );
+    }
+  }
+
+  &__image-bg {
+    @include cover-image;
+    height: 100%;
+  }
+
+  &__content {
+    @include flex-center;
+    padding: $spacing-6;
+    overflow-y: auto;
+
+    @include respond-to(md) {
+      padding: $spacing-12;
+    }
+  }
+}
+
+// ============================================
+// AUTH CARD
+// ============================================
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background-color: $color-bg-primary;
+  border-radius: $radius-2xl;
+  padding: $spacing-8;
+  box-shadow: $shadow-2xl;
+
+  @include respond-to(md) {
+    padding: $spacing-10;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: $spacing-8;
+  }
+
+  &__logo {
+    font-family: $font-display;
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $color-primary-700;
+    margin: 0 0 $spacing-3;
+    line-height: $line-height-tight;
+
+    @include respond-to(md) {
+      font-size: $font-size-4xl;
+    }
+  }
+
+  &__logo-accent {
+    font-style: italic;
+  }
+
+  &__subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: $line-height-relaxed;
+  }
+
+  &__footer {
+    text-align: center;
+    margin-top: $spacing-6;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+  }
+}
+
+// ============================================
+// AUTH TABS
+// ============================================
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-2;
+  margin-bottom: $spacing-6;
+  padding: $spacing-1;
+  background-color: $color-neutral-100;
+  border-radius: $radius-lg;
+
+  &__tab {
+    @include flex-center;
+    padding: $spacing-3;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-secondary;
+    background-color: transparent;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-base;
+    text-decoration: none;
+    letter-spacing: $letter-spacing-wide;
+
+    &:hover {
+      color: $color-primary-700;
+    }
+
+    &--active {
+      color: $color-primary-700;
+      background-color: $color-bg-primary;
+      box-shadow: $shadow-sm;
+    }
+  }
+}
+
+// ============================================
+// AUTH FORM
+// ============================================
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-5;
+}
+
+// ============================================
+// FORM FIELDS
+// ============================================
+
+.form-field {
+  &__label {
+    @include label;
+    margin-bottom: $spacing-2;
+  }
+
+  &__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    position: absolute;
+    left: $spacing-4;
+    color: $color-text-tertiary;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &__input {
+    @include input-base;
+    padding-left: $spacing-10;
+    padding-right: $spacing-4;
+
+    &:focus + .form-field__icon {
+      color: $color-primary-600;
+    }
+  }
+
+  &__toggle {
+    position: absolute;
+    right: $spacing-3;
+    @include flex-center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    color: $color-text-tertiary;
+    background-color: transparent;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover:not(:disabled) {
+      color: $color-primary-600;
+      background-color: $color-primary-50;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// Form input standalone (without icon)
+input.form-field__input:not(.form-field__input-wrapper .form-field__input) {
+  @include input-base;
+}
+
+// ============================================
+// FORM ROW
+// ============================================
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-4;
+  flex-wrap: wrap;
+
+  &--2-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: $spacing-4;
+
+    @include respond-to(sm) {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+}
+
+// ============================================
+// FORM CHECKBOX
+// ============================================
+
+.form-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+  cursor: pointer;
+  user-select: none;
+
+  span {
+    line-height: $line-height-relaxed;
+  }
+}
+
+.form-checkbox {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  border: 2px solid $color-border-medium;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+  appearance: none;
+  background-color: $color-bg-primary;
+
+  &:checked {
+    background-color: $color-primary-600;
+    border-color: $color-primary-600;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='white'%3E%3Cpath d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($color-primary-500, 0.1);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================
+// FORM LINK
+// ============================================
+
+.form-link {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $color-primary-600;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: $color-primary-700;
+    text-decoration: underline;
+  }
+}
+
+// ============================================
+// ALERTS
+// ============================================
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  padding: $spacing-4;
+  border-radius: $radius-lg;
+  font-size: $font-size-sm;
+  line-height: $line-height-relaxed;
+  margin-bottom: $spacing-4;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &--error {
+    color: $color-error;
+    background-color: rgba($color-error, 0.1);
+    border: 1px solid rgba($color-error, 0.2);
+  }
+
+  &--success {
+    color: $color-success;
+    background-color: rgba($color-success, 0.1);
+    border: 1px solid rgba($color-success, 0.2);
+  }
+
+  &--info {
+    color: $color-info;
+    background-color: rgba($color-info, 0.1);
+    border: 1px solid rgba($color-info, 0.2);
+  }
+}
+
+// ============================================
+// AUTH DIVIDER
+// ============================================
+
+.auth-divider {
+  position: relative;
+  text-align: center;
+  margin: $spacing-6 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: $color-border-light;
+  }
+
+  &__text {
+    position: relative;
+    display: inline-block;
+    padding: 0 $spacing-4;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-tertiary;
+    background-color: $color-bg-primary;
+    text-transform: uppercase;
+    letter-spacing: $letter-spacing-wider;
+  }
+}
+
+// ============================================
+// SOCIAL LOGIN
+// ============================================
+
+.social-login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-3;
+}
+
+// ============================================
+// BUTTONS
+// ============================================
+
+.btn {
+  @include button-base;
+  font-family: $font-primary;
+
+  &--primary {
+    @include button-primary;
+  }
+
+  &--secondary {
+    @include button-secondary;
+  }
+
+  &--social {
+    @include button-base;
+    background-color: $color-bg-primary;
+    color: $color-text-primary;
+    border: 2px solid $color-border-light;
+    padding: $spacing-3 $spacing-4;
+    font-weight: $font-weight-medium;
+
+    &:hover:not(:disabled) {
+      border-color: $color-border-medium;
+      background-color: $color-neutral-50;
+      transform: translateY(-1px);
+      box-shadow: $shadow-sm;
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+    }
+  }
+
+  &--block {
+    width: 100%;
+  }
+
+  &--lg {
+    padding: $spacing-4 $spacing-6;
+    font-size: $font-size-base;
+  }
+
+  &__spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-2;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

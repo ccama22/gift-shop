@@ -1,0 +1,277 @@
+// ============================================
+// FUNCTIONS - SCSS Utility Functions
+// ============================================
+
+@use 'sass:math';
+@use 'sass:color';
+@use './variables' as *;
+
+// --------------------------------------------
+// SPACING FUNCTIONS
+// --------------------------------------------
+
+/// Convert pixels to rem
+/// @param {Number} $pixels - Value in pixels
+/// @param {Number} $base [16] - Base font size
+/// @return {Number} - Value in rem
+@function rem($pixels, $base: 16) {
+  @return math.div($pixels, $base) * 1rem;
+}
+
+/// Convert pixels to em
+/// @param {Number} $pixels - Value in pixels
+/// @param {Number} $base [16] - Base font size
+/// @return {Number} - Value in em
+@function em($pixels, $base: 16) {
+  @return math.div($pixels, $base) * 1em;
+}
+
+/// Get spacing value from scale
+/// @param {Number} $multiplier - Spacing multiplier
+/// @return {Number} - Spacing value
+@function spacing($multiplier) {
+  @return $spacing-4 * $multiplier;
+}
+
+// --------------------------------------------
+// COLOR FUNCTIONS
+// --------------------------------------------
+
+/// Lighten a color by mixing with white
+/// @param {Color} $color - Base color
+/// @param {Number} $percentage - Percentage to lighten (0-100)
+/// @return {Color} - Lightened color
+@function tint($color, $percentage) {
+  @return color.mix(white, $color, $percentage);
+}
+
+/// Darken a color by mixing with black
+/// @param {Color} $color - Base color
+/// @param {Number} $percentage - Percentage to darken (0-100)
+/// @return {Color} - Darkened color
+@function shade($color, $percentage) {
+  @return color.mix(black, $color, $percentage);
+}
+
+/// Create alpha (transparent) version of color
+/// @param {Color} $color - Base color
+/// @param {Number} $opacity - Opacity value (0-1)
+/// @return {Color} - Color with alpha
+@function alpha($color, $opacity) {
+  @return rgba($color, $opacity);
+}
+
+// --------------------------------------------
+// Z-INDEX FUNCTION
+// --------------------------------------------
+
+/// Get z-index from scale
+/// @param {String} $layer - Layer name
+/// @return {Number} - Z-index value
+@function z-index($layer) {
+  $layers: (
+    'dropdown': $z-index-dropdown,
+    'sticky': $z-index-sticky,
+    'fixed': $z-index-fixed,
+    'modal-backdrop': $z-index-modal-backdrop,
+    'modal': $z-index-modal,
+    'popover': $z-index-popover,
+    'tooltip': $z-index-tooltip,
+  );
+
+  @if map-has-key($layers, $layer) {
+    @return map-get($layers, $layer);
+  }
+
+  @warn "Z-index layer '#{$layer}' not found. Available layers: #{map-keys($layers)}";
+  @return null;
+}
+
+// --------------------------------------------
+// RESPONSIVE FUNCTIONS
+// --------------------------------------------
+
+/// Calculate fluid typography
+/// @param {Number} $min-size - Minimum font size
+/// @param {Number} $max-size - Maximum font size
+/// @param {Number} $min-width [$breakpoint-sm] - Minimum viewport width
+/// @param {Number} $max-width [$breakpoint-xl] - Maximum viewport width
+/// @return {String} - Clamp function value
+@function fluid-type(
+  $min-size,
+  $max-size,
+  $min-width: $breakpoint-sm,
+  $max-width: $breakpoint-xl
+) {
+  $slope: math.div($max-size - $min-size, $max-width - $min-width);
+  $y-axis-intersection: -$min-width * $slope + $min-size;
+
+  @return clamp(
+    #{$min-size},
+    #{$y-axis-intersection} + #{$slope * 100}vw,
+    #{$max-size}
+  );
+}
+
+/// Calculate fluid spacing
+/// @param {Number} $min-space - Minimum spacing
+/// @param {Number} $max-space - Maximum spacing
+/// @return {String} - Clamp function value
+@function fluid-space($min-space, $max-space) {
+  @return fluid-type($min-space, $max-space);
+}
+
+// --------------------------------------------
+// GRID FUNCTIONS
+// --------------------------------------------
+
+/// Calculate column width in a grid
+/// @param {Number} $columns - Number of columns to span
+/// @param {Number} $total-columns [$grid-columns] - Total columns in grid
+/// @return {Number} - Percentage width
+@function grid-width($columns, $total-columns: $grid-columns) {
+  @return math.percentage(math.div($columns, $total-columns));
+}
+
+// --------------------------------------------
+// UNIT CONVERSION
+// --------------------------------------------
+
+/// Strip unit from a value
+/// @param {Number} $value - Value with unit
+/// @return {Number} - Unitless value
+@function strip-unit($value) {
+  @return math.div($value, $value * 0 + 1);
+}
+
+/// Get unit from a value
+/// @param {Number} $value - Value with unit
+/// @return {String} - Unit type
+@function get-unit($value) {
+  @return str-slice($value + '', str-length($value + '') + 1, -1);
+}
+
+// --------------------------------------------
+// STRING FUNCTIONS
+// --------------------------------------------
+
+/// Replace substring in a string
+/// @param {String} $string - Original string
+/// @param {String} $search - Substring to search
+/// @param {String} $replace - Replacement string
+/// @return {String} - Modified string
+@function str-replace($string, $search, $replace: '') {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace +
+      str-replace(
+        str-slice($string, $index + str-length($search)),
+        $search,
+        $replace
+      );
+  }
+
+  @return $string;
+}
+
+// --------------------------------------------
+// MATH FUNCTIONS
+// --------------------------------------------
+
+/// Power function
+/// @param {Number} $base - Base number
+/// @param {Number} $exponent - Exponent
+/// @return {Number} - Result
+@function pow($base, $exponent) {
+  $result: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $result: $result * $base;
+    }
+  } @else if $exponent < 0 {
+    @for $i from $exponent through -1 {
+      $result: math.div($result, $base);
+    }
+  }
+
+  @return $result;
+}
+
+/// Calculate modular scale
+/// @param {Number} $increment - Scale increment
+/// @param {Number} $base [$font-size-base] - Base size
+/// @param {Number} $ratio [1.25] - Scale ratio (e.g., 1.25 = major third)
+/// @return {Number} - Scaled value
+@function modular-scale($increment, $base: $font-size-base, $ratio: 1.25) {
+  @return $base * pow($ratio, $increment);
+}
+
+// --------------------------------------------
+// CONTRAST & ACCESSIBILITY
+// --------------------------------------------
+
+/// Calculate contrast ratio between two colors
+/// @param {Color} $color1 - First color
+/// @param {Color} $color2 - Second color
+/// @return {Number} - Contrast ratio
+@function contrast-ratio($color1, $color2) {
+  $l1: luminance($color1);
+  $l2: luminance($color2);
+
+  @if $l1 > $l2 {
+    @return math.div($l1 + 0.05, $l2 + 0.05);
+  } @else {
+    @return math.div($l2 + 0.05, $l1 + 0.05);
+  }
+}
+
+/// Calculate relative luminance
+/// @param {Color} $color - Color to calculate
+/// @return {Number} - Relative luminance
+@function luminance($color) {
+  $red: color.channel($color, 'red', $space: rgb);
+  $green: color.channel($color, 'green', $space: rgb);
+  $blue: color.channel($color, 'blue', $space: rgb);
+
+  $r: math.div($red, 255);
+  $g: math.div($green, 255);
+  $b: math.div($blue, 255);
+
+  @if $r <= 0.03928 {
+    $r: math.div($r, 12.92);
+  } @else {
+    $r: pow(math.div($r + 0.055, 1.055), 2.4);
+  }
+
+  @if $g <= 0.03928 {
+    $g: math.div($g, 12.92);
+  } @else {
+    $g: pow(math.div($g + 0.055, 1.055), 2.4);
+  }
+
+  @if $b <= 0.03928 {
+    $b: math.div($b, 12.92);
+  } @else {
+    $b: pow(math.div($b + 0.055, 1.055), 2.4);
+  }
+
+  @return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+}
+
+/// Get accessible text color based on background
+/// @param {Color} $bg-color - Background color
+/// @param {Color} $light-text [$color-text-inverse] - Light text color
+/// @param {Color} $dark-text [$color-text-primary] - Dark text color
+/// @return {Color} - Accessible text color
+@function text-color($bg-color, $light-text: $color-text-inverse, $dark-text: $color-text-primary) {
+  $light-ratio: contrast-ratio($bg-color, $light-text);
+  $dark-ratio: contrast-ratio($bg-color, $dark-text);
+
+  @if $light-ratio > $dark-ratio {
+    @return $light-text;
+  } @else {
+    @return $dark-text;
+  }
+}

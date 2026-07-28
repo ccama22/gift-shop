@@ -1,0 +1,71 @@
+// ============================================
+// REGISTER COMPONENT STYLES
+// ============================================
+
+// No usar abstracts por ahora para evitar problemas de ruta
+// Los estilos vienen de _auth.scss global
+
+// Password Strength Indicator
+.password-strength {
+  margin-top: 0.5rem;
+
+  &__bars {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  &__bar {
+    flex: 1;
+    height: 4px;
+    background-color: #e5e5e5;
+    border-radius: 9999px;
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &--active {
+      opacity: 1;
+    }
+
+    &--weak {
+      background-color: #ef4444;
+    }
+
+    &--medium {
+      background-color: #f59e0b;
+    }
+
+    &--strong {
+      background-color: #22c55e;
+    }
+  }
+
+  &__text {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+
+    &--weak {
+      color: #ef4444;
+    }
+
+    &--medium {
+      color: #f59e0b;
+    }
+
+    &--strong {
+      color: #22c55e;
+    }
+  }
+}
+
+// Loading spinner animation
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}

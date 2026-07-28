@@ -1,0 +1,758 @@
+// ============================================
+// PRODUCT FORM - MOBILE FIRST
+// ============================================
+
+$primary: #D63447;
+$primary-hover: #B02545;
+$secondary: #F57B51;
+$neutral: #887271;
+$font-heading: 'Playfair Display', serif;
+$font-body: 'Montserrat', sans-serif;
+
+// Breakpoints
+$tablet: 768px;
+$desktop: 1024px;
+$wide: 1280px;
+
+// ============================================
+// HOST - Espaciado del contenido
+// ============================================
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  padding: 1.5rem;
+  padding-bottom: 2rem; // Reducido para que no quede tan pegado abajo
+  background: #FAF3F1;
+}
+
+// ============================================
+// HEADER DEL FORMULARIO
+// ============================================
+.form-header {
+  margin-bottom: 2rem;
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin: 0.75rem 0 1.5rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+}
+
+// Breadcrumb
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+
+  &__link {
+    color: #A08E90;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+
+  &__separator {
+    color: #D4C5C3;
+    font-size: 1rem;
+  }
+
+  &__current {
+    color: $primary;
+  }
+}
+
+// ============================================
+// ALERT
+// ============================================
+.alert {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+
+  &--error {
+    background: #FEE;
+    border: 1px solid #FCC;
+    color: #C33;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+// ============================================
+// CONTENIDO DEL FORMULARIO
+// ============================================
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+// ============================================
+// SECCIONES
+// ============================================
+.media-section,
+.details-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-bottom: 2rem; // Espacio al final de cada sección
+}
+
+// ============================================
+// CARDS
+// ============================================
+.card {
+  background: white;
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #F0E6E3;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__title {
+    font-family: $font-heading;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $primary;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__note {
+    margin-top: 1.25rem;
+    font-size: 0.8rem;
+    color: #A08E90;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-style: italic;
+    
+    svg {
+      flex-shrink: 0;
+      margin-top: 0.125rem;
+    }
+  }
+}
+
+// ============================================
+// TOGGLE LABEL
+// ============================================
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1A1A1A;
+  }
+}
+
+// ============================================
+// IMAGE UPLOAD
+// ============================================
+.image-upload {
+  margin-bottom: 1rem;
+
+  &__dropzone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem;
+    border: 2px dashed #E8C4CC;
+    border-radius: 0.75rem;
+    background: #FFE8ED;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $primary;
+      background: #FFD9E1;
+    }
+
+    svg {
+      color: #C7A5B0;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__text {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #5A4A4D;
+    margin-bottom: 0.25rem;
+  }
+
+  &__hint {
+    font-size: 0.8125rem;
+    color: #9B8287;
+  }
+}
+
+// ============================================
+// IMAGE GALLERY THUMBNAILS
+// ============================================
+.image-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.thumbnail-box {
+  aspect-ratio: 1;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  
+  &--placeholder {
+    border: 2px solid #FFE8ED;
+    background: #FFF5F8;
+    
+    svg {
+      width: 28px;
+      height: 28px;
+      color: #D4B8BE;
+    }
+    
+    &:hover {
+      border-color: #FFD9E1;
+      background: #FFE8ED;
+      
+      svg {
+        color: #C7A5B0;
+      }
+    }
+  }
+  
+  &--add {
+    border: 2px dashed #E8C4CC;
+    background: white;
+    
+    svg {
+      width: 32px;
+      height: 32px;
+      color: $primary;
+    }
+    
+    &:hover {
+      border-color: $primary;
+      background: #FFF5F8;
+      transform: scale(1.02);
+    }
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  &__remove {
+    position: absolute;
+    top: 0.375rem;
+    right: 0.375rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: $primary;
+    transition: all 0.2s ease;
+    opacity: 0;
+    
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+    
+    &:hover {
+      background: $primary;
+      color: white;
+    }
+  }
+  
+  &:hover &__remove {
+    opacity: 1;
+  }
+}
+
+.image-preview {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background: #F7F2F0;
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  &__remove {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: $primary;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary;
+      color: white;
+      transform: scale(1.1);
+    }
+  }
+}
+
+// ============================================
+// FORM ELEMENTS
+// ============================================
+.form-group {
+  margin-bottom: 2.5rem;
+
+  &:last-child {
+    margin-bottom: 2.5rem;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.75rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #706268;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+
+  &--required::after {
+    content: ' *';
+    color: $primary;
+  }
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid #F0E6E3;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  font-family: $font-body;
+  transition: all 0.2s ease;
+  background: #FFF5F8;
+  color: #1A1A1A;
+
+  &:focus {
+    outline: none;
+    border-color: $primary;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(214, 52, 71, 0.08);
+  }
+
+  &::placeholder {
+    color: #B8A5AA;
+    font-style: italic;
+  }
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23887271' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.form-hint {
+  font-size: 0.75rem;
+  color: $neutral;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+
+  svg {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    color: #10B981;
+  }
+}
+
+// Input con icono
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: $neutral;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.form-input--with-icon {
+  padding-left: 2.5rem;
+}
+
+// Input Group
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.form-input--group {
+  flex: 1;
+}
+
+.btn-group {
+  padding: 0.75rem 1rem;
+  background: white;
+  border: 1px solid #EEDDD9;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: $neutral;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+    background: #FFF5F7;
+  }
+}
+
+// ============================================
+// TAGS
+// ============================================
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid #F0E6E3;
+  border-radius: 0.75rem;
+  background: #FFF5F8;
+  min-height: 56px;
+  align-items: center;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: linear-gradient(135deg, #FFF5F7 0%, #FFE8EC 100%);
+  color: $primary;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  border: 1px solid #FFE8EC;
+
+  &__remove {
+    background: none;
+    border: none;
+    color: $primary;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary;
+      color: white;
+    }
+  }
+}
+
+.tag-input-wrapper {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+}
+
+.tag-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  font-family: $font-body;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  color: #1A1A1A;
+
+  &::placeholder {
+    color: #B8A5AA;
+    font-style: normal;
+    font-weight: 400;
+  }
+}
+
+// ============================================
+// CHECKBOX
+// ============================================
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  margin-top: 2rem;
+
+  input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: $primary;
+  }
+
+  &__text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1A1A1A;
+  }
+}
+
+// ============================================
+// TOGGLE SWITCH
+// ============================================
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  &__slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E5E7EB;
+    transition: 0.3s;
+    border-radius: 24px;
+    
+    &::before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+  }
+  
+  input:checked + &__slider {
+    background-color: $primary;
+  }
+  
+  input:checked + &__slider::before {
+    transform: translateX(20px);
+  }
+}
+
+// ============================================
+// BUTTONS
+// ============================================
+.btn-outline,
+.btn-primary,
+.btn-outline-full {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  font-family: $font-body;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-height: 44px;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}
+
+.btn-outline {
+  background: white;
+  border: 1px solid #EEDDD9;
+  color: $neutral;
+
+  &:hover:not(:disabled) {
+    border-color: $primary;
+    color: $primary;
+    background: #FFF5F7;
+  }
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, $primary 0%, $primary-hover 100%);
+  border: none;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, $primary-hover 0%, $primary 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(214, 52, 71, 0.3);
+  }
+}
+
+.btn-outline-full {
+  width: 100%;
+  background: white;
+  border: 1px solid #EEDDD9;
+  color: $neutral;
+  padding: 1rem 1.5rem;
+  font-size: 0.9375rem;
+
+  &:hover {
+    border-color: $primary;
+    color: $primary;
+    background: #FFF5F7;
+  }
+}
+
+// ============================================
+// TABLET (768px+)
+// ============================================
+@media (min-width: $tablet) {
+  :host {
+    padding: 2rem;
+    padding-bottom: 3rem; // Más espacio en tablet
+  }
+  
+  .form-header {
+    &__title {
+      font-size: 2rem;
+    }
+  }
+
+  .form-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+// ============================================
+// DESKTOP (1024px+) - Grid de 2 columnas
+// ============================================
+@media (min-width: $desktop) {
+  :host {
+    padding: 2.5rem 3.5rem 4rem; // Reducido el padding inferior
+  }
+  
+  .form-content {
+    display: grid;
+    grid-template-columns: 440px 1fr;
+    gap: 3rem;
+  }
+  
+  .card {
+    padding: 2.5rem;
+  }
+}
+
+// ============================================
+// WIDE (1280px+)
+// ============================================
+@media (min-width: $wide) {
+  // El max-width lo maneja el admin-layout padre
+}

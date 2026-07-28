@@ -1,0 +1,85 @@
+// ============================================
+// FOOTER
+// ============================================
+
+@use '../abstracts' as *;
+
+.footer {
+  background-color: $color-bg-secondary;
+  padding: $spacing-12 0 $spacing-6;
+  margin-top: $spacing-20;
+
+  &__container {
+    max-width: $container-max-width;
+    margin: 0 auto;
+    padding: 0 $container-padding;
+  }
+
+  &__grid {
+    @include grid(1, $spacing-8);
+    margin-bottom: $spacing-10;
+
+    @include respond-to(sm) {
+      @include grid(2, $spacing-8);
+    }
+
+    @include respond-to(md) {
+      @include grid(4, $spacing-8);
+    }
+  }
+
+  &__section-title {
+    @include heading($font-size-base, $font-weight-semibold);
+    margin-bottom: $spacing-4;
+    color: $color-text-primary;
+  }
+
+  &__links {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-3;
+
+    a {
+      color: $color-text-secondary;
+      transition: color $transition-fast;
+
+      &:hover {
+        color: $color-primary-700;
+      }
+    }
+  }
+
+  &__bottom {
+    padding-top: $spacing-6;
+    border-top: 1px solid $color-border-light;
+    @include flex-between;
+    flex-wrap: wrap;
+    gap: $spacing-4;
+  }
+
+  &__copyright {
+    font-size: $font-size-sm;
+    color: $color-text-tertiary;
+  }
+
+  &__social {
+    display: flex;
+    gap: $spacing-3;
+
+    a {
+      @include flex-center;
+      width: 36px;
+      height: 36px;
+      color: $color-text-secondary;
+      background-color: $color-bg-primary;
+      border-radius: $radius-full;
+      transition: all $transition-fast;
+
+      &:hover {
+        color: $color-text-inverse;
+        background-color: $color-primary-600;
+        transform: translateY(-2px);
+      }
+    }
+  }
+}

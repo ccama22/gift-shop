@@ -1,0 +1,223 @@
+// ============================================
+// RESET - Modern CSS Reset
+// ============================================
+// Based on Josh Comeau's CSS Reset + Custom additions
+
+@use '../abstracts' as *;
+
+// --------------------------------------------
+// 1. Box Sizing
+// --------------------------------------------
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// --------------------------------------------
+// 2. Root & Document
+// --------------------------------------------
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: $font-primary;
+  font-size: $font-size-base;
+  line-height: $line-height-normal;
+  color: $color-text-primary;
+  background-color: $color-bg-primary;
+}
+
+// --------------------------------------------
+// 3. Typography
+// --------------------------------------------
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+// --------------------------------------------
+// 4. Media Elements
+// --------------------------------------------
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+svg {
+  fill: currentColor;
+}
+
+// --------------------------------------------
+// 5. Forms
+// --------------------------------------------
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+input[type='search']::-webkit-search-decoration,
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-results-button,
+input[type='search']::-webkit-search-results-decoration {
+  display: none;
+}
+
+// --------------------------------------------
+// 6. Lists
+// --------------------------------------------
+
+ul,
+ol {
+  list-style: none;
+}
+
+// --------------------------------------------
+// 7. Tables
+// --------------------------------------------
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+// --------------------------------------------
+// 8. Links
+// --------------------------------------------
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+// --------------------------------------------
+// 9. Focus & Accessibility
+// --------------------------------------------
+
+:focus-visible {
+  outline: 2px solid $color-primary-500;
+  outline-offset: 2px;
+}
+
+// Remove outline for mouse users
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+// --------------------------------------------
+// 10. Angular Specific
+// --------------------------------------------
+
+// Remove router outlet wrapper issues
+router-outlet {
+  display: none;
+}
+
+// Ensure Angular components take full height when needed
+:host {
+  display: block;
+}
+
+// --------------------------------------------
+// 11. Selection
+// --------------------------------------------
+
+::selection {
+  background-color: alpha($color-primary-500, 0.2);
+  color: $color-text-primary;
+}
+
+::-moz-selection {
+  background-color: alpha($color-primary-500, 0.2);
+  color: $color-text-primary;
+}
+
+// --------------------------------------------
+// 12. Scrollbar (Optional - Chromium only)
+// --------------------------------------------
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: $color-neutral-100;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $color-neutral-300;
+  border-radius: $radius-full;
+  border: 3px solid $color-neutral-100;
+
+  &:hover {
+    background: $color-neutral-400;
+  }
+}
+
+// --------------------------------------------
+// 13. Prefers Reduced Motion
+// --------------------------------------------
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

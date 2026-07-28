@@ -1,0 +1,23 @@
+// ============================================
+// LOGIN COMPONENT STYLES
+// ============================================
+
+// No usar abstracts por ahora para evitar problemas de ruta
+// Los estilos vienen de _auth.scss global
+
+// Component-specific styles only
+.btn--primary {
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+// Loading spinner animation
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}

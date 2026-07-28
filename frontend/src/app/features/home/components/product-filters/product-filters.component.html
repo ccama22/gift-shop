@@ -1,0 +1,62 @@
+<!-- ============================================ -->
+<!-- FILTROS LATERALES - Según tu imagen -->
+<!-- ============================================ -->
+<aside class="filters">
+  <div class="filters__header">
+    <h3 class="filters__title">Filtros</h3>
+  </div>
+
+  <!-- Categorías con checkboxes -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">CATEGORÍA</h4>
+    <div class="filter-section__content">
+      @for (category of categories; track category.id) {
+        <label class="checkbox-label">
+          <input 
+            type="checkbox"
+            [checked]="selectedCategories.includes(category.id)"
+            (change)="onCategoryChange(category.id, $any($event.target).checked)"
+          />
+          <span class="checkbox-label__text">{{ category.label }}</span>
+        </label>
+      }
+    </div>
+  </div>
+
+  <!-- Rango de Precio con SLIDER -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">RANGO DE PRECIO</h4>
+    <div class="filter-section__content">
+      <input 
+        type="range" 
+        class="price-slider"
+        min="25" 
+        max="500" 
+        [(ngModel)]="priceValue"
+        (input)="onPriceChange()"
+        [style.--slider-progress]="getSliderProgress() + '%'"
+      />
+      <div class="price-labels">
+        <span>$25</span>
+        <span>$500+</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ocasiones con DROPDOWN -->
+  <div class="filter-section">
+    <h4 class="filter-section__title">OCASIÓN</h4>
+    <div class="filter-section__content">
+      <select 
+        class="occasion-select"
+        [(ngModel)]="selectedOccasion"
+        (change)="onOccasionChange()"
+      >
+        <option value="">Todas las Ocasiones</option>
+        @for (occasion of occasions; track occasion.id) {
+          <option [value]="occasion.id">{{ occasion.label }}</option>
+        }
+      </select>
+    </div>
+  </div>
+</aside>

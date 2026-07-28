@@ -1,0 +1,126 @@
+<!-- ============================================ -->
+<!-- GRID DE PRODUCTOS CON CONTROLES -->
+<!-- ============================================ -->
+<div class="products">
+  <!-- Header con controles -->
+  <div class="products__header">
+    <div class="products__count">
+      <span class="products__showing">Mostrando <strong>{{ products.length }}</strong></span>
+      <span class="products__total">productos exclusivos</span>
+    </div>
+
+    <div class="products__controls">
+      <!-- View Toggle -->
+      <div class="view-toggle">
+        <button 
+          class="view-toggle__btn"
+          [class.view-toggle__btn--active]="viewMode === 'grid'"
+          (click)="viewMode = 'grid'"
+          aria-label="Vista de cuadrícula"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </button>
+        <button 
+          class="view-toggle__btn"
+          [class.view-toggle__btn--active]="viewMode === 'list'"
+          (click)="viewMode = 'list'"
+          aria-label="Vista de lista"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="8" y1="6" x2="21" y2="6"></line>
+            <line x1="8" y1="12" x2="21" y2="12"></line>
+            <line x1="8" y1="18" x2="21" y2="18"></line>
+            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Sort Dropdown -->
+      <select class="products__sort" [(ngModel)]="sortBy" (change)="onSortChange()">
+        <option value="featured">Destacados</option>
+        <option value="price-asc">Precio: Menor a Mayor</option>
+        <option value="price-desc">Precio: Mayor a Menor</option>
+        <option value="name">Nombre: A-Z</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Grid de productos -->
+  <div 
+    class="products__grid"
+    [class.products__grid--list]="viewMode === 'list'"
+  >
+    @for (product of products; track product.id) {
+      <div class="product-card">
+        <!-- Botón de favorito -->
+        <button class="product-card__wishlist" aria-label="Agregar a favoritos">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+        </button>
+
+        <!-- Imagen del producto -->
+        <div class="product-card__image">
+          <img [src]="product.image" [alt]="product.name" />
+          @if (product.badge) {
+            <span class="product-card__badge">{{ product.badge }}</span>
+          }
+        </div>
+
+        <!-- Info del producto -->
+        <div class="product-card__info">
+          <h3 class="product-card__name">{{ product.name }}</h3>
+          <p class="product-card__description">{{ product.description }}</p>
+          
+          <!-- Rating -->
+          <div class="product-card__rating">
+            <div class="stars">
+              @for (star of [1,2,3,4,5]; track star) {
+                <svg width="14" height="14" viewBox="0 0 24 24" [attr.fill]="star <= product.rating ? '#FFD700' : '#E5E5E5'">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              }
+            </div>
+            <span class="product-card__reviews">({{ product.reviews }})</span>
+          </div>
+
+          <!-- Precio y botón -->
+          <div class="product-card__footer">
+            <span class="product-card__price">{{ product.price | currency:'USD':'symbol':'1.2-2' }}</span>
+            <button class="product-card__btn" (click)="onAddToCart(product)">
+              Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <button class="pagination__btn pagination__btn--prev" aria-label="Página anterior">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    
+    <button class="pagination__page pagination__page--active">1</button>
+    <button class="pagination__page">2</button>
+    <button class="pagination__page">3</button>
+    <span class="pagination__dots">...</span>
+    <button class="pagination__page">12</button>
+    
+    <button class="pagination__btn pagination__btn--next" aria-label="Página siguiente">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
