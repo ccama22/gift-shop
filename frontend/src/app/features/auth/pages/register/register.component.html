@@ -19,17 +19,17 @@
           Velvet <span class="auth-card__logo-accent">&</span> Vine
         </h1>
         <p class="auth-card__subtitle">
-          Join our world of curated elegance and thoughtful gifting.
+          Únete a nuestro mundo de elegancia seleccionada y regalos pensados con esmero.
         </p>
       </div>
 
       <!-- Tabs -->
       <div class="auth-tabs">
         <a routerLink="/auth/login" class="auth-tabs__tab">
-          LOGIN
+          INICIAR SECCION
         </a>
         <button class="auth-tabs__tab auth-tabs__tab--active">
-          CREATE ACCOUNT
+          CREAR CUENTA
         </button>
       </div>
 
@@ -49,7 +49,7 @@
         <div class="form-row form-row--2-cols">
           <div class="form-field">
             <label for="firstName" class="form-field__label">
-              First Name
+              Nombre
             </label>
             <input
               id="firstName"
@@ -66,7 +66,7 @@
 
           <div class="form-field">
             <label for="lastName" class="form-field__label">
-              Last Name
+              Apellido
             </label>
             <input
               id="lastName"
@@ -85,7 +85,7 @@
         <!-- Email Field -->
         <div class="form-field">
           <label for="email" class="form-field__label">
-            Email Address
+            Correo electrónico
           </label>
           <div class="form-field__input-wrapper">
             <svg class="form-field__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -109,7 +109,7 @@
         <!-- Password Field -->
         <div class="form-field">
           <label for="password" class="form-field__label">
-            Password
+            Contraseña
           </label>
           <div class="form-field__input-wrapper">
             <svg class="form-field__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -176,7 +176,7 @@
         <!-- Confirm Password Field -->
         <div class="form-field">
           <label for="confirmPassword" class="form-field__label">
-            Confirm Password
+            Confirmar contraseña
           </label>
           <div class="form-field__input-wrapper">
             <svg class="form-field__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -225,9 +225,9 @@
               required
             />
             <span>
-              I agree to the 
+              Acepto los
               <a routerLink="/terms" class="form-link">Terms of Service</a> 
-              and 
+              Y 
               <a routerLink="/privacy" class="form-link">Privacy Policy</a>
             </span>
           </label>
@@ -239,7 +239,7 @@
           class="btn btn--primary btn--block btn--lg"
           [disabled]="isLoading()"
         >
-          <span *ngIf="!isLoading()">CREATE ACCOUNT</span>
+          <span *ngIf="!isLoading()">CREAR CUENTA</span>
           <span *ngIf="isLoading()" class="btn__spinner">
             <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
@@ -251,7 +251,7 @@
 
       <!-- Divider -->
       <div class="auth-divider">
-        <span class="auth-divider__text">OR SIGN UP WITH</span>
+        <span class="auth-divider__text">O REGÍSTRATE CON</span>
       </div>
 
       <!-- Social Login -->
@@ -286,8 +286,8 @@
 
       <!-- Already have account -->
       <div class="auth-card__footer">
-        Already have an account?
-        <a routerLink="/auth/login" class="form-link">Sign in</a>
+        ¿Ya tienes una cuenta?
+        <a routerLink="/auth/login" class="form-link">Iniciar sesión</a>
       </div>
     </div>
   </div>
