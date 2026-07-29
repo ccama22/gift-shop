@@ -83,7 +83,7 @@ pnpm run db:create
 # Copiar .env.example a .env y editar
 cp .env.example .env
 
-# Podria hacer esto o solo ejecutar el paso 6 ya que generara las tablas automaticmnete 
+# Podria hacer esto o solo ejecutar el paso 6 ya que generara las tablas automaticmnete
 # pero al final tiene que hacer el paso 5
 
 # 4. Ejecutar migraciones
