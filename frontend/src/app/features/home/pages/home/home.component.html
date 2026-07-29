@@ -15,7 +15,33 @@
 
     <!-- Grid de productos -->
     <div class="products-section__content">
-      <app-product-grid [products]="filteredProducts" />
+      <!-- Indicador de carga -->
+      @if (isLoading) {
+        <div class="loading-spinner">
+          <div class="spinner"></div>
+          <p>Cargando productos...</p>
+        </div>
+      }
+      
+      <!-- Mensaje de error -->
+      @else if (errorMessage) {
+        <div class="error-message">
+          <p>{{ errorMessage }}</p>
+          <button (click)="loadProducts()" class="retry-button">Reintentar</button>
+        </div>
+      }
+      
+      <!-- Grid de productos -->
+      @else if (filteredProducts.length > 0) {
+        <app-product-grid [products]="filteredProducts" />
+      }
+      
+      <!-- Mensaje cuando no hay productos -->
+      @else {
+        <div class="no-products">
+          <p>No se encontraron productos que coincidan con los filtros seleccionados.</p>
+        </div>
+      }
     </div>
   </div>
 </section>
