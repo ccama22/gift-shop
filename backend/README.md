@@ -1,98 +1,327 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# 🎁 Gift Shop - Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST para gestión de tienda de regalos construida con **NestJS**, **TypeORM** y **PostgreSQL** siguiendo **Clean Architecture**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 🏗️ Arquitectura
 
-## Description
+**Patrón**: Clean Architecture (Hexagonal Architecture)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Project setup
-
-```bash
-$ pnpm install
+```
+src/
+├── domain/                      # Capa de Dominio (Entidades y Reglas de Negocio)
+│   ├── entities/               # Product, Category, ProductImage, Tag
+│   ├── value-objects/          # Money, Sku, StockLevel
+│   ├── enums/                  # ProductCategory, StockStatus
+│   └── exceptions/             # Custom domain exceptions
+│
+├── application/                 # Capa de Aplicación (Casos de Uso)
+│   ├── use-cases/              # CreateProduct, UpdateProduct, DeleteProduct
+│   ├── dto/                    # Request/Response DTOs
+│   └── ports/                  # Interfaces (ProductRepository, FileStorage)
+│
+├── infrastructure/              # Capa de Infraestructura (Implementaciones)
+│   ├── persistence/
+│   │   └── typeorm/           # Implementación con TypeORM
+│   │       ├── entities/      # Entidades TypeORM (mapeo DB)
+│   │       ├── repositories/  # Implementación de ports
+│   │       ├── migrations/    # Migraciones de DB
+│   │       └── seeders/       # Datos iniciales
+│   ├── file-upload/           # Manejo de archivos (Multer)
+│   └── security/              # Seguridad (Helmet, Throttler)
+│
+├── presentation/                # Capa de Presentación (Controllers/API)
+│   └── http/
+│       └── controllers/       # ProductController, CategoryController
+│
+├── auth/                        # Módulo de Autenticación (JWT + Refresh Tokens)
+│   ├── entities/              # User, Session
+│   ├── dto/                   # LoginDto, RegisterDto, AuthResponseDto
+│   ├── jwt.strategy.ts        # Estrategia Passport JWT
+│   └── jwt-auth.guard.ts      # Guard de protección
+│
+└── config/                      # Configuración global
+    └── database.config.ts     # Conexión TypeORM
 ```
 
-## Compile and run the project
+**Principios aplicados**:
+- ✅ **SOLID** (Single Responsibility, Open/Closed, Liskov, Interface Segregation, Dependency Inversion)
+- ✅ **Dependency Injection** (IoC con NestJS)
+- ✅ **Repository Pattern** (abstracción de persistencia)
+- ✅ **DTO Pattern** (separación de capas)
+- ✅ **Value Objects** (encapsulación de lógica de negocio)
+
+**Stack Técnico**:
+- NestJS (framework Node.js)
+- TypeORM (ORM para PostgreSQL)
+- PostgreSQL (base de datos)
+- Passport JWT (autenticación)
+- Class Validator + Class Transformer (validación)
+- Multer (subida de archivos)
+- Helmet + Throttler (seguridad)
+
+## 🚀 Instalación y Ejecución
+
+### Prerequisitos
+- Node.js 18+
+- PostgreSQL 14+
+- pnpm (o npm)
+
+### Pasos
 
 ```bash
-# development
-$ pnpm run start
+# 1. Instalar dependencias
+pnpm install
 
-# watch mode
-$ pnpm run start:dev
+# 2. Crear base de datos
+# Opción A: Ejecutar script SQL manualmente
+psql -U postgres -f create-database.sql
 
-# production mode
-$ pnpm run start:prod
+# Opción B: Usar script automatizado
+pnpm run db:create
+
+# 3. Configurar variables de entorno
+# Copiar .env.example a .env y editar
+cp .env.example .env
+
+# 4. Ejecutar migraciones
+pnpm run migration:run
+
+# 5. (Opcional) Insertar datos de prueba
+pnpm run seed:run
+
+# 6. Iniciar servidor de desarrollo
+pnpm run start:dev
+# Disponible en http://localhost:3000
 ```
 
-## Run tests
+## ⚙️ Variables de Entorno (.env)
+
+Crea un archivo `.env` en la raíz del proyecto con estas variables:
+
+```env
+# Entorno de la aplicación
+NODE_ENV=development
+PORT=3000
+
+# Configuración de Base de Datos PostgreSQL
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=tu_password_seguro
+DB_NAME=gift_shop_db
+
+# Configuración de JWT (JSON Web Tokens)
+# IMPORTANTE: En producción, genera secretos seguros con:
+# node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
+# Secret para firmar tokens (OBLIGATORIO)
+# Debe tener al menos 64 caracteres aleatorios
+JWT_ACCESS_TOKEN_SECRET=cambia_este_secreto_por_uno_seguro_generado_aleatoriamente_de_64_bytes_minimo
+
+# Tiempos de expiración
+JWT_ACCESS_TOKEN_EXPIRES_IN=900        # 15 minutos (en segundos)
+JWT_REFRESH_TOKEN_EXPIRES_IN=604800    # 7 días (en segundos)
+```
+
+### 🔒 Generar Secretos Seguros
+
+Para producción, genera secretos criptográficamente seguros:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+# Generar un secreto aleatorio de 64 bytes
+node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
-## Deployment
+Copia el resultado y úsalo en `JWT_ACCESS_TOKEN_SECRET`.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## 📝 Comandos Principales
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+# Desarrollo
+pnpm run start:dev          # Servidor con hot-reload
+pnpm run start:debug        # Servidor con debugging
+
+# Build
+pnpm run build              # Compilar para producción
+pnpm run start:prod         # Ejecutar build de producción
+
+# Migraciones de Base de Datos
+pnpm run migration:generate <MigrationName>  # Generar migración automática
+pnpm run migration:create <MigrationName>    # Crear migración vacía
+pnpm run migration:run                       # Ejecutar migraciones pendientes
+pnpm run migration:revert                    # Revertir última migración
+pnpm run migration:show                      # Ver estado de migraciones
+
+# Seeders (Datos de Prueba)
+pnpm run seed:run           # Insertar datos iniciales
+pnpm run db:reset           # Resetear DB + migrar + seed
+
+# Testing
+pnpm run test               # Ejecutar tests unitarios
+pnpm run test:watch         # Tests en modo watch
+pnpm run test:cov           # Generar reporte de cobertura
+pnpm run test:e2e           # Tests end-to-end
+
+# Calidad de Código
+pnpm run lint               # Verificar código con ESLint
+pnpm run format             # Formatear con Prettier
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## � Endpoints Principales
 
-## Resources
+### Autenticación
+- `POST /api/auth/register` - Registrar usuario
+- `POST /api/auth/login` - Iniciar sesión (devuelve access + refresh tokens)
+- `POST /api/auth/refresh` - Renovar access token
+- `POST /api/auth/logout` - Cerrar sesión (invalida refresh token)
 
-Check out a few resources that may come in handy when working with NestJS:
+### Productos (requieren autenticación)
+- `GET /api/products` - Listar productos
+- `GET /api/products/:id` - Obtener detalle de producto
+- `POST /api/products` - Crear producto (con imágenes)
+- `PATCH /api/products/:id` - Actualizar producto
+- `DELETE /api/products/:id` - Eliminar producto (soft delete)
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Categorías
+- `GET /api/categories` - Listar categorías
 
-## Support
+### Imágenes
+- `GET /uploads/:filename` - Obtener imagen
+- `DELETE /api/products/:id/images/:imageId` - Eliminar imagen
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+## 🔐 Autenticación JWT
 
-## Stay in touch
+El sistema usa **doble token**:
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+1. **Access Token**: Corta duración (15 min), se envía en cada request
+2. **Refresh Token**: Larga duración (7 días), permite renovar access token
 
-## License
+### Flujo de autenticación
+```
+1. Login → Devuelve { accessToken, refreshToken, user }
+2. Cliente guarda ambos tokens
+3. Cada request lleva: Authorization: Bearer <accessToken>
+4. Si access token expira → llamar a /auth/refresh con refreshToken
+5. Logout → invalida refresh token en DB
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Headers requeridos
+```http
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+## �️ Base de Datos
+
+### Diagrama de Entidades
+
+```
+User
+├── id (PK)
+├── email (unique)
+├── password (hashed)
+├── fullName
+└── createdAt
+
+Session (Refresh Tokens)
+├── id (PK)
+├── userId (FK → User)
+├── refreshToken (hashed)
+├── expiresAt
+└── createdAt
+
+Product
+├── id (PK)
+├── name
+├── sku (unique)
+├── description
+├── price (decimal)
+├── stock
+├── category (enum)
+├── isActive
+├── lowStockAlert
+├── tags (array)
+├── images (1:N → ProductImage)
+└── timestamps (created, updated, deleted)
+
+ProductImage
+├── id (PK)
+├── productId (FK → Product)
+├── filename
+├── path
+├── isPrimary
+└── createdAt
+```
+
+### Migraciones
+
+Las migraciones están en `src/infrastructure/persistence/typeorm/migrations/`
+
+Para crear una nueva:
+```bash
+# Genera automáticamente basándose en cambios de entidades
+pnpm run migration:generate src/infrastructure/persistence/typeorm/migrations/AddNewColumn
+
+# O crea una vacía para escribir manualmente
+pnpm run migration:create src/infrastructure/persistence/typeorm/migrations/CustomMigration
+```
+
+## 🛡️ Seguridad
+
+- ✅ **Helmet**: Headers de seguridad HTTP
+- ✅ **Throttler**: Rate limiting (10 req/min por IP)
+- ✅ **CORS**: Configurado para frontend específico
+- ✅ **Bcrypt**: Hash de contraseñas (10 salt rounds)
+- ✅ **JWT**: Tokens firmados con secreto
+- ✅ **Validación**: Class Validator en todos los DTOs
+- ✅ **Soft Delete**: No se borran registros físicamente
+
+## � Gestión de Archivos
+
+Las imágenes se guardan en `uploads/` con:
+- Nombre único (UUID + timestamp)
+- Validación de tipo (jpg, jpeg, png, webp)
+- Límite de tamaño (5MB por imagen)
+
+**Nota**: En producción, considera usar S3 o similar en lugar de almacenamiento local.
+
+## 🐛 Troubleshooting
+
+### Error: Database connection failed
+```bash
+# Verifica que PostgreSQL esté corriendo
+# Windows:
+net start postgresql-x64-14
+
+# Verifica credenciales en .env
+```
+
+### Error: JWT must be provided
+```bash
+# Asegúrate de:
+# 1. Estar logueado (tener accessToken)
+# 2. Incluir header: Authorization: Bearer <token>
+```
+
+### Error: Migrations failed
+```bash
+# Resetea la base de datos (¡cuidado! borra datos)
+pnpm run migration:revert
+pnpm run migration:run
+```
+
+### Puerto 3000 en uso
+```bash
+# Cambia el puerto en .env
+PORT=3001
+```
+
+## 📚 Recursos
+
+- [NestJS Documentation](https://docs.nestjs.com/)
+- [TypeORM Migrations Guide](https://typeorm.io/migrations)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [JWT Best Practices](https://tools.ietf.org/html/rfc8725)
+
+---
+
+**Desarrollado con NestJS + Clean Architecture + PostgreSQL**
