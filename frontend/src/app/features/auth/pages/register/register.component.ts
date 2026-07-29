@@ -115,7 +115,6 @@ export class RegisterComponent {
     // Call auth service
     this.authService.register({ email, password, firstName, lastName }).subscribe({
       next: (response: any) => {
-        console.log('Registration successful:', response.user);
         // Redirect to home page after successful registration
         this.router.navigate(['/']);
       },

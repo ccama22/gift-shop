@@ -10,10 +10,10 @@ import { CommonModule } from '@angular/common';
 })
 export class HeroComponent {
   onShopBoutique(): void {
-    console.log('Navigate to boutique');
+    // TODO: Navigate to boutique
   }
 
   onExploreRegistry(): void {
-    console.log('Navigate to registry');
+    // TODO: Navigate to registry
   }
 }

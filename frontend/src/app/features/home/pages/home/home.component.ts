@@ -116,8 +116,6 @@ export class HomeComponent {
   filteredProducts: Product[] = [...this.allProducts];
 
   onFiltersChange(filters: FilterState): void {
-    console.log('Filters changed:', filters);
-    
     // Aplicar filtros
     this.filteredProducts = this.allProducts.filter(product => {
       // Filtro de categoría

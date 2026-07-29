@@ -29,8 +29,6 @@ export class ProductGridComponent {
   sortBy = 'featured';
 
   onSortChange(): void {
-    console.log('Sort by:', this.sortBy);
-    
     // Crear copia para no mutar el array original
     let sorted = [...this.products];
     
@@ -54,6 +52,6 @@ export class ProductGridComponent {
   }
 
   onAddToCart(product: Product): void {
-    console.log('Add to cart:', product);
+    // TODO: Implement add to cart
   }
 }
