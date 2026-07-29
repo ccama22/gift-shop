@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Componentes
 import { HeroComponent } from '../../components/hero/hero.component';
 import { ProductFiltersComponent, FilterState } from '../../components/product-filters/product-filters.component';
 import { ProductGridComponent, Product } from '../../components/product-grid/product-grid.component';
+
+// Servicios
+import { ProductService } from '@core/services/product.service';
+import { Product as BackendProduct } from '@core/models/product.model';
 
 @Component({
   selector: 'app-home',
@@ -18,105 +22,113 @@ import { ProductGridComponent, Product } from '../../components/product-grid/pro
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
-  allProducts: Product[] = [
-    {
-      id: 1,
-      name: 'Rose & Teddy Bouquet',
-      description: 'Ramo elegante con rosas premium y osito de peluche',
-      price: 85.00,
-      image: 'https://images.unsplash.com/photo-1606800052052-452d5c61c4b7?w=500&h=500&fit=crop',
-      badge: 'Hot Deal',
-      rating: 5,
-      reviews: 42,
-      category: 'bouquets',
-      occasion: 'birthday'
-    },
-    {
-      id: 2,
-      name: 'Gourmet Chocolate Box',
-      description: 'Caja premium con 24 chocolates artesanales belgas',
-      price: 42.00,
-      image: 'https://images.unsplash.com/photo-1511381939415-e44015466834?w=500&h=500&fit=crop',
-      rating: 5,
-      reviews: 128,
-      category: 'chocolates',
-      occasion: 'valentines'
-    },
-    {
-      id: 3,
-      name: 'Birthday Surprise Combo',
-      description: 'Combinación perfecta de flores y chocolates',
-      price: 120.00,
-      image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&h=500&fit=crop',
-      rating: 5,
-      reviews: 89,
-      category: 'combos',
-      occasion: 'birthday'
-    },
-    {
-      id: 4,
-      name: 'Elegant Lily Arrangement',
-      description: 'Arreglo sofisticado de lirios blancos',
-      price: 65.00,
-      image: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=500&h=500&fit=crop',
-      rating: 4,
-      reviews: 56,
-      category: 'bouquets',
-      occasion: 'anniversary'
-    },
-    {
-      id: 5,
-      name: 'Artisan Truffle Collection',
-      description: 'Selección exclusiva de trufas gourmet',
-      price: 58.00,
-      image: 'https://images.unsplash.com/photo-1548848979-47519fe7dbae?w=500&h=500&fit=crop',
-      badge: 'New',
-      rating: 5,
-      reviews: 34,
-      category: 'chocolates',
-      occasion: 'anniversary'
-    },
-    {
-      id: 6,
-      name: 'Anniversary Premium Set',
-      description: 'Set romántico con rosas rojas y chocolates',
-      price: 145.00,
-      image: 'https://images.unsplash.com/photo-1565024108888-ec82c58f722f?w=500&h=500&fit=crop',
-      rating: 5,
-      reviews: 167,
-      category: 'combos',
-      occasion: 'anniversary'
-    },
-    {
-      id: 7,
-      name: 'Spring Garden Bouquet',
-      description: 'Mezcla fresca de flores de temporada',
-      price: 72.00,
-      image: 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=500&h=500&fit=crop',
-      rating: 4,
-      reviews: 73,
-      category: 'bouquets',
-      occasion: 'mothers-day'
-    },
-    {
-      id: 8,
-      name: 'Luxury Gift Hamper',
-      description: 'Canasta premium con chocolates y vino',
-      price: 195.00,
-      image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&h=500&fit=crop',
-      badge: 'Bestseller',
-      rating: 5,
-      reviews: 201,
-      category: 'combos',
-      occasion: 'graduation'
-    }
-  ];
+export class HomeComponent implements OnInit {
+  private readonly productService = inject(ProductService);
 
-  filteredProducts: Product[] = [...this.allProducts];
+  allProducts: Product[] = [];
+  filteredProducts: Product[] = [];
+  isLoading = false;
+  errorMessage: string | null = null;
 
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  /**
+   * Cargar productos desde el backend
+   */
+  loadProducts(): void {
+    this.isLoading = true;
+    this.errorMessage = null;
+    
+    console.log('🔍 Iniciando carga de productos...');
+    console.log('📡 API URL:', this.productService.API_URL);
+    
+    this.productService.loadProducts().subscribe({
+      next: (backendProducts) => {
+        console.log('✅ Productos recibidos del backend:', backendProducts);
+        console.log('📊 Total de productos:', backendProducts.length);
+        
+        // Mapear productos del backend al formato del componente
+        this.allProducts = backendProducts
+          .filter(p => p.isActive) // Solo productos activos
+          .map(p => this.mapBackendProduct(p));
+        
+        console.log('✅ Productos activos mapeados:', this.allProducts.length);
+        
+        this.filteredProducts = [...this.allProducts];
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('❌ Error cargando productos:', error);
+        console.error('❌ Status:', error.status);
+        console.error('❌ Message:', error.message);
+        console.error('❌ Error completo:', JSON.stringify(error, null, 2));
+        
+        // Mensaje amigable según el tipo de error
+        if (error.status === 0) {
+          this.errorMessage = 'No se puede conectar al servidor. Verifica que el backend esté corriendo en http://localhost:3000';
+        } else if (error.status === 404) {
+          this.errorMessage = 'Endpoint de productos no encontrado';
+        } else {
+          this.errorMessage = error.message || 'Error al cargar productos';
+        }
+        
+        this.isLoading = false;
+      }
+    });
+  }
+
+  /**
+   * Mapear producto del backend al formato del componente
+   */
+  private mapBackendProduct(product: BackendProduct): Product {
+    // Determinar imagen a usar (primaria o la principal)
+    const primaryImage = product.images?.find(img => img.isPrimary);
+    const imageUrl = primaryImage?.imageUrl || product.imageUrl || 'https://via.placeholder.com/500';
+    
+    // Construir URL completa de la imagen si es necesario
+    const fullImageUrl = imageUrl.startsWith('http') 
+      ? imageUrl 
+      : `${this.productService.SERVER_URL}${imageUrl}`;
+
+    return {
+      id: parseInt(product.id, 10) || 0,
+      name: product.name,
+      description: product.description || '',
+      price: product.price,
+      image: fullImageUrl,
+      badge: this.getBadgeForProduct(product),
+      rating: 5, // TODO: Implementar sistema de ratings
+      reviews: Math.floor(Math.random() * 100) + 10, // TODO: Implementar reviews reales
+      category: product.categoryId,
+      occasion: this.getOccasionFromTags(product.tags)
+    };
+  }
+
+  /**
+   * Determinar badge basado en las características del producto
+   */
+  private getBadgeForProduct(product: BackendProduct): string | undefined {
+    if (product.tags.includes('bestseller')) return 'Bestseller';
+    if (product.tags.includes('hot-deal')) return 'Hot Deal';
+    if (product.tags.includes('new')) return 'New';
+    if (product.isCombo) return 'Combo';
+    return undefined;
+  }
+
+  /**
+   * Obtener ocasión desde los tags del producto
+   */
+  private getOccasionFromTags(tags: string[]): string | undefined {
+    const occasions = ['birthday', 'anniversary', 'valentines', 'mothers-day', 'graduation'];
+    return tags.find(tag => occasions.includes(tag));
+  }
+
+  /**
+   * Manejar cambio de filtros
+   */
   onFiltersChange(filters: FilterState): void {
-    // Aplicar filtros
     this.filteredProducts = this.allProducts.filter(product => {
       // Filtro de categoría
       const matchesCategory = filters.categories.length === 0 || 
