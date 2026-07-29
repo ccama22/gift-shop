@@ -76,7 +76,6 @@ export class LoginComponent {
     // Call auth service
     this.authService.login({ email, password }).subscribe({
       next: (response: any) => {
-        console.log('Login successful:', response.user);
         // Redirect to admin dashboard after successful login
         this.router.navigate([this.returnUrl]);
       },

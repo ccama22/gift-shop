@@ -20,3 +20,9 @@ export const IRegisterUserUseCase = Symbol('IRegisterUserUseCase');
 export const ILoginUserUseCase = Symbol('ILoginUserUseCase');
 export const IRefreshTokenUseCase = Symbol('IRefreshTokenUseCase');
 export const ILogoutUserUseCase = Symbol('ILogoutUserUseCase');
+export const ICreateProductUseCase = Symbol('ICreateProductUseCase');
+export const IUpdateProductStatusUseCase = Symbol(
+  'IUpdateProductStatusUseCase',
+);
+export const IUpdateProductUseCase = Symbol('IUpdateProductUseCase');
+export const IDeleteProductUseCase = Symbol('IDeleteProductUseCase');

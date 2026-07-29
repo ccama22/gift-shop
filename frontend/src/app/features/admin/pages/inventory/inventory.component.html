@@ -2,6 +2,21 @@
 <!-- GESTIÓN DE INVENTARIO - Solo Contenido -->
 <!-- ============================================ -->
 
+<!-- Modal de Confirmación Global -->
+<app-confirmation-dialog
+  [config]="dialogConfig()!"
+  [show]="showDialog()"
+  (result)="onDialogResult($event)"
+/>
+
+<!-- Drawer de Detalle de Producto -->
+<app-product-detail-drawer
+  [config]="detailConfig()"
+  [show]="showDetail()"
+  [categories]="categories()"
+  (result)="onDetailResult($event)"
+/>
+
 <!-- Encabezado -->
 <header class="content-header">
   <div class="content-header__left">
@@ -173,7 +188,12 @@
                   </td>
                   <td class="table__td">
                     <div class="product-cell">
-                      <img [src]="getProductImage(product)" [alt]="product.name" class="product-cell__img" />
+                      <img 
+                        [src]="getProductImage(product)" 
+                        [alt]="product.name" 
+                        class="product-cell__img"
+                        (error)="onImageError($event)"
+                      />
                       <div style="display: flex; flex-direction: column;">
                         <span class="product-cell__name">{{ product.name }}</span>
                         @if (product.isCombo) {
@@ -187,7 +207,7 @@
                   </td>
                   <td class="table__td">{{ getCategoryName(product.categoryId) }}</td>
                   <td class="table__td">
-                    <span class="price-text">\${{ product.price.toFixed(2) }}</span>
+                    <span class="price-text">${{ product.price.toFixed(2) }}</span>
                   </td>
                   <td class="table__td">
                     <span [style.color]="product.stock > 10 ? '#10B981' : product.stock > 0 ? '#F59E0B' : '#EF4444'" style="font-weight: 600;">
@@ -195,23 +215,39 @@
                     </span>
                   </td>
                   <td class="table__td">
-                    <label class="toggle">
-                      <input type="checkbox" [checked]="isProductActive(product)" />
+                    <!-- Toggle FUNCIONAL -->
+                    <label class="toggle" (click)="$event.stopPropagation()">
+                      <input 
+                        type="checkbox" 
+                        [checked]="isProductActive(product)"
+                        (change)="toggleProductStatus(product, $event)"
+                      />
                       <span class="toggle__slider"></span>
                     </label>
-                    <span class="status-label" [class.status-label--active]="isProductActive(product)">
-                      {{ isProductActive(product) ? 'Activo' : 'Inactivo' }}
+                    
+                    <!-- Badge con estado detallado -->
+                    <span 
+                      class="status-badge" 
+                      [ngClass]="getProductStatusBadge(product).class"
+                    >
+                      {{ getProductStatusBadge(product).label }}
                     </span>
                   </td>
                   <td class="table__td">
                     <div class="actions-menu">
-                      <button class="action-btn" title="Editar">
+                      <button class="action-btn" title="Ver detalle" (click)="viewProductDetail(product)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                          <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                      </button>
+                      <button class="action-btn" title="Editar" (click)="navigateToEditProduct(product.id)">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                           <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                         </svg>
                       </button>
-                      <button class="action-btn" title="Eliminar">
+                      <button class="action-btn" title="Eliminar" (click)="deleteProduct(product)">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                           <polyline points="3 6 5 6 21 6"></polyline>
                           <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>

@@ -10,6 +10,7 @@ import {
   OrderOrmEntity,
   OrderItemOrmEntity,
 } from '../infrastructure/persistence/typeorm/entities';
+import { ProductImageOrmEntity } from '../infrastructure/persistence/typeorm/entities/product-image.orm-entity';
 
 export default registerAs('database', (): TypeOrmModuleOptions => ({
   type: 'postgres',
@@ -24,6 +25,7 @@ export default registerAs('database', (): TypeOrmModuleOptions => ({
     SessionOrmEntity,
     CategoryOrmEntity,
     ProductOrmEntity,
+    ProductImageOrmEntity,
     ComboItemOrmEntity,
     AddressOrmEntity,
     OrderOrmEntity,

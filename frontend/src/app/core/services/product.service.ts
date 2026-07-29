@@ -1,7 +1,8 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, tap, catchError, of, finalize } from 'rxjs';
-import { Product, Category, ProductFilters } from '@core/models/product.model';
+import { Observable, tap, catchError, of, finalize, throwError } from 'rxjs';
+import { Product, Category, ProductFilters, CreateProductRequest, UpdateProductRequest } from '@core/models/product.model';
+import { environment } from '../../../environments/environment';
 
 /**
  * ProductService - Servicio para gestión de productos con Signals
@@ -16,7 +17,8 @@ import { Product, Category, ProductFilters } from '@core/models/product.model';
 })
 export class ProductService {
   private readonly http = inject(HttpClient);
-  private readonly API_URL = 'http://localhost:3000/api';
+  public readonly API_URL = environment.apiUrl;
+  public readonly SERVER_URL = environment.serverUrl;
 
   // ============================================
   // SIGNALS - Estado Reactivo
@@ -87,17 +89,17 @@ export class ProductService {
   });
 
   /**
-   * Computed: Total de productos activos (con stock > 0)
+   * Computed: Total de productos activos y vendibles (isActive && stock > 0)
    */
   public readonly activeProductsCount = computed(() => {
-    return this.productsSignal().filter(p => p.stock > 0).length;
+    return this.productsSignal().filter(p => p.isActive && p.stock > 0).length;
   });
 
   /**
-   * Computed: Total de productos sin stock
+   * Computed: Total de productos sin stock (pero activos)
    */
   public readonly outOfStockCount = computed(() => {
-    return this.productsSignal().filter(p => p.stock === 0).length;
+    return this.productsSignal().filter(p => p.isActive && p.stock === 0).length;
   });
 
   /**
@@ -172,6 +174,130 @@ export class ProductService {
       catchError(error => {
         console.error(`Error cargando producto ${id}:`, error);
         return of(null);
+      })
+    );
+  }
+
+  /**
+   * Crear un nuevo producto
+   */
+  createProduct(data: CreateProductRequest): Observable<Product> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+    return this.http.post<Product>(`${this.API_URL}/products`, data).pipe(
+      tap(product => {
+        this.productsSignal.update(products => [product, ...products]);
+      }),
+      catchError(error => {
+        console.error('Error creando producto:', error);
+        this.errorSignal.set('Error al crear producto. Intenta de nuevo.');
+        return throwError(() => error);
+      }),
+      finalize(() => {
+        this.loadingSignal.set(false);
+      })
+    );
+  }
+
+  /**
+   * Actualizar un producto existente
+   */
+  updateProduct(id: string, data: UpdateProductRequest): Observable<Product> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+    return this.http.patch<Product>(`${this.API_URL}/products/${id}`, data).pipe(
+      tap(updatedProduct => {
+        this.productsSignal.update(products =>
+          products.map(p => p.id === id ? updatedProduct : p)
+        );
+      }),
+      catchError(error => {
+        console.error('Error actualizando producto:', error);
+        this.errorSignal.set('Error al actualizar producto. Intenta de nuevo.');
+        return throwError(() => error);
+      }),
+      finalize(() => {
+        this.loadingSignal.set(false);
+      })
+    );
+  }
+
+  /**
+   * Subir imagen de producto
+   */
+  uploadImage(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    return this.http.post<{ url: string }>(
+      `${this.API_URL}/products/upload-image`,
+      formData
+    );
+  }
+
+  /**
+   * Agregar múltiples imágenes a un producto
+   */
+  addProductImages(productId: string, images: Array<{ url: string; isPrimary?: boolean }>): Observable<any> {
+    return this.http.post(
+      `${this.API_URL}/products/${productId}/images`,
+      { images }
+    );
+  }
+
+  /**
+   * Eliminar una imagen de un producto
+   */
+  deleteProductImage(productId: string, imageId: string): Observable<any> {
+    return this.http.delete(
+      `${this.API_URL}/products/${productId}/images/${imageId}`
+    );
+  }
+
+  /**
+   * Eliminar un producto
+   */
+  deleteProduct(productId: string): Observable<void> {
+    this.loadingSignal.set(true);
+    this.errorSignal.set(null);
+    return this.http.delete<void>(`${this.API_URL}/products/${productId}`).pipe(
+      tap(() => {
+        // Eliminar del signal de productos
+        this.productsSignal.update(products =>
+          products.filter(p => p.id !== productId)
+        );
+      }),
+      catchError(error => {
+        console.error('Error eliminando producto:', error);
+        this.errorSignal.set('Error al eliminar producto. Intenta de nuevo.');
+        return throwError(() => error);
+      }),
+      finalize(() => {
+        this.loadingSignal.set(false);
+      })
+    );
+  }
+
+  /**
+   * Cambiar estado de activación del producto
+   */
+  updateProductStatus(productId: string, isActive: boolean): Observable<Product> {
+    return this.http.patch<Product>(
+      `${this.API_URL}/products/${productId}/status`,
+      { isActive }
+    ).pipe(
+      tap(updatedProduct => {
+        this.productsSignal.update(products =>
+          products.map(p =>
+            p.id === productId
+              ? { ...p, isActive: updatedProduct.isActive }
+              : p
+          )
+        );
+      }),
+      catchError(error => {
+        console.error('Error actualizando estado:', error);
+        return throwError(() => error);
       })
     );
   }

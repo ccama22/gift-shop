@@ -23,6 +23,11 @@ export class ProductMapper {
       stock: orm.stock,
       isCombo: orm.isCombo,
       imageUrl: orm.imageUrl,
+      isActive: orm.isActive,
+      sku: orm.sku,
+      tags: orm.tags,
+      lowStockAlert: orm.lowStockAlert,
+      deletedAt: orm.deletedAt,
       components,
       createdAt: orm.createdAt,
       updatedAt: orm.updatedAt,
@@ -38,7 +43,12 @@ export class ProductMapper {
     orm.price = domain.getPrice();
     orm.stock = domain.getStock();
     orm.isCombo = domain.getIsCombo();
+    orm.isActive = domain.getIsActive();
     orm.imageUrl = domain.getImageUrl();
+    orm.sku = domain.getSku();
+    orm.tags = domain.getTags();
+    orm.lowStockAlert = domain.getLowStockAlert();
+    orm.deletedAt = domain.getDeletedAt();
     orm.createdAt = domain.getCreatedAt();
     orm.updatedAt = domain.getUpdatedAt();
 
