@@ -112,8 +112,11 @@ export class RegisterComponent {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
+    // Combine firstName and lastName into name for backend
+    const name = `${firstName} ${lastName}`.trim();
+
     // Call auth service
-    this.authService.register({ email, password, firstName, lastName }).subscribe({
+    this.authService.register({ name, email, password }).subscribe({
       next: (response: any) => {
         // Redirect to home page after successful registration
         this.router.navigate(['/']);
