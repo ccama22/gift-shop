@@ -55,6 +55,14 @@ pids
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+# Uploads - User uploaded files (images, documents, etc.)
+uploads/*
+!uploads/.gitkeep
+!uploads/README.md
+!uploads/products/
+uploads/products/*
+!uploads/products/.gitkeep
+
 # Kiro AI - Documentation and Skills
 /docs
 /skills
