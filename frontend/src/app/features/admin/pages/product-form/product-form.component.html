@@ -7,9 +7,9 @@
   <div class="breadcrumb">
     <a (click)="navigateToInventory()" class="breadcrumb__link" style="cursor: pointer;">INVENTARIO</a>
     <span class="breadcrumb__separator">›</span>
-    <span class="breadcrumb__current">REGISTRAR PRODUCTO</span>
+    <span class="breadcrumb__current">{{ mode() === 'edit' ? 'EDITAR PRODUCTO' : 'REGISTRAR PRODUCTO' }}</span>
   </div>
-  <h1 class="form-header__title">Registrar Nuevo Producto</h1>
+  <h1 class="form-header__title">{{ mode() === 'edit' ? 'Editar Producto' : 'Registrar Nuevo Producto' }}</h1>
 
   <!-- Acciones del Header -->
   <div class="form-header__actions">
@@ -33,7 +33,7 @@
         <line x1="2" y1="12" x2="6" y2="12"></line>
         <line x1="18" y1="12" x2="22" y2="12"></line>
       </svg>
-      {{ loading() ? 'Guardando...' : 'Registrar Producto' }}
+      {{ loading() ? 'Guardando...' : (mode() === 'edit' ? 'Guardar Cambios' : 'Registrar Producto') }}
     </button>
   </div>
 </header>
@@ -62,13 +62,25 @@
             <label class="toggle">
               <input 
                 type="checkbox" 
-                [checked]="formData().stock !== null && formData().stock! > 0"
-                disabled
+                [checked]="formData().isActive"
+                (change)="updateField('isActive', $any($event.target).checked)"
               />
               <span class="toggle__slider"></span>
             </label>
           </label>
         </div>
+
+        <!-- Alerta si no hay imagen -->
+        @if (!productImages().main) {
+          <div class="alert alert--warning">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+            Debes agregar al menos una imagen para poder guardar el producto
+          </div>
+        }
 
         <!-- Área de Upload de Imagen Principal -->
         <div class="image-upload">
@@ -103,9 +115,17 @@
 
         <!-- Galería de Miniaturas -->
         <div class="image-thumbnails">
-          <!-- Miniaturas con imágenes -->
+          <!-- Miniatura de la Imagen Principal -->
+          @if (productImages().main) {
+            <div class="thumbnail-box thumbnail-box--main" [title]="'Imagen principal del producto'">
+              <img [src]="productImages().main" alt="Imagen principal" />
+              <span class="thumbnail-box__badge">Portada</span>
+            </div>
+          }
+
+          <!-- Miniaturas de la Galería -->
           @for (image of productImages().gallery; track $index) {
-            <div class="thumbnail-box" (click)="onThumbnailClick($index)" [title]="'Click para usar como imagen principal'">
+            <div class="thumbnail-box" (click)="onThumbnailClick($index)" [title]="'Click para establecer como portada'">
               <img [src]="image" alt="Miniatura {{$index + 1}}" />
               <button 
                 type="button" 
@@ -120,18 +140,7 @@
             </div>
           }
           
-          <!-- Placeholders vacíos -->
-          @for (slot of getEmptySlots(); track $index) {
-            <div class="thumbnail-box thumbnail-box--placeholder">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <circle cx="8.5" cy="8.5" r="1.5"></circle>
-                <polyline points="21 15 16 10 5 21"></polyline>
-              </svg>
-            </div>
-          }
-          
-          <!-- Botón para agregar más (solo si no se alcanzó el máximo) -->
+          <!-- Botón para agregar más imágenes -->
           @if (canAddMoreImages()) {
             <label class="thumbnail-box thumbnail-box--add" [title]="'Agregar más imágenes'">
               <input 
@@ -159,6 +168,30 @@
         </p>
       </div>
 
+      <!-- Hint dinámico según estado -->
+      <div class="status-hint" *ngIf="formData().stock !== null">
+        <div class="hint hint--success" *ngIf="formData().isActive && formData().stock! > 0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+          <span><strong>Disponible:</strong> El producto se mostrará en el catálogo y se puede comprar</span>
+        </div>
+        
+        <div class="hint hint--warning" *ngIf="formData().isActive && formData().stock === 0">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+          </svg>
+          <span><strong>Activo sin stock:</strong> Visible en catálogo pero no se puede comprar aún</span>
+        </div>
+        
+        <div class="hint hint--error" *ngIf="!formData().isActive">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+          <span><strong>Desactivado:</strong> El producto NO aparecerá en el catálogo</span>
+        </div>
+      </div>
+
       <!-- Entrada de Inventario Inicial -->
       <div class="card">
         <div class="card__header">
@@ -184,14 +217,6 @@
             Se activará una notificación automática cuando el stock caiga por debajo del umbral especificado
           </p>
         </div>
-
-        <button type="button" class="btn-outline-full">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-          </svg>
-          Duplicar Datos Base del SKU
-        </button>
       </div>
     </aside>
 
@@ -280,23 +305,34 @@
               class="form-input form-input--group" 
               [value]="formData().sku"
               (input)="updateField('sku', $any($event.target).value)"
-              readonly
+              [readonly]="mode() === 'edit'"
             />
-            <button type="button" class="btn-group" (click)="generateSKU()">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <polyline points="1 20 1 14 7 14"></polyline>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-              </svg>
-              Generar
-            </button>
+            @if (mode() === 'create') {
+              <button type="button" class="btn-group" (click)="generateSKU()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"></polyline>
+                  <polyline points="1 20 1 14 7 14"></polyline>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                </svg>
+                Generar
+              </button>
+            }
           </div>
           <p class="form-hint">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
-            El sistema validará automáticamente la unicidad al registrar
+            @if (mode() === 'edit') {
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              El SKU se guarda en la base de datos y debe ser único
+            } @else {
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              El código SKU se valida automáticamente para garantizar unicidad
+            }
           </p>
         </div>
 
@@ -322,11 +358,13 @@
                 [value]="newTag()"
                 (input)="newTag.set($any($event.target).value)"
                 (keydown.enter)="addTag(); $event.preventDefault()"
+                (keydown.comma)="addTag(); $event.preventDefault()"
+                (blur)="addTag()"
               />
             </div>
           </div>
           
-          <p class="form-hint">Presiona Enter para agregar una etiqueta</p>
+          <p class="form-hint">Presiona Enter para agregar una etiqueta. Las etiquetas se guardan en la base de datos.</p>
         </div>
 
         <!-- Checkbox: Es Combo -->

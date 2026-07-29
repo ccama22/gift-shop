@@ -19,17 +19,17 @@
           Velvet <span class="auth-card__logo-accent">&</span> Vine
         </h1>
         <p class="auth-card__subtitle">
-          Welcome back to your world of curated elegance.
+          Bienvenido de nuevo a tu mundo de elegancia cuidadosamente seleccionada.
         </p>
       </div>
 
       <!-- Tabs -->
       <div class="auth-tabs">
         <button class="auth-tabs__tab auth-tabs__tab--active">
-          LOGIN
+          INICIAR SECCION
         </button>
         <a routerLink="/auth/register" class="auth-tabs__tab">
-          CREATE ACCOUNT
+          CREAR CUENTA
         </a>
       </div>
 
@@ -48,7 +48,7 @@
         <!-- Email Field -->
         <div class="form-field">
           <label for="email" class="form-field__label">
-            Email Address
+            Correo Electronico
           </label>
           <div class="form-field__input-wrapper">
             <svg class="form-field__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -72,7 +72,7 @@
         <!-- Password Field -->
         <div class="form-field">
           <label for="password" class="form-field__label">
-            Password
+            Contraseña
           </label>
           <div class="form-field__input-wrapper">
             <svg class="form-field__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -119,10 +119,10 @@
               (change)="onRememberMeChange($any($event.target).checked)"
               [disabled]="isLoading()"
             />
-            <span>Remember me</span>
+            <span>Acuérdate de mí</span>
           </label>
           <a routerLink="/auth/forgot-password" class="form-link">
-            Forgot Password?
+            Recuperar contraseña?
           </a>
         </div>
 
@@ -132,7 +132,7 @@
           class="btn btn--primary btn--block btn--lg"
           [disabled]="isLoading()"
         >
-          <span *ngIf="!isLoading()">ENTER THE BOUTIQUE</span>
+          <span *ngIf="!isLoading()">ENTRA EN LA BOUTIQUE</span>
           <span *ngIf="isLoading()" class="btn__spinner">
             <svg class="spinner" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
@@ -144,7 +144,7 @@
 
       <!-- Divider -->
       <div class="auth-divider">
-        <span class="auth-divider__text">OR CONTINUE WITH</span>
+        <span class="auth-divider__text">O CONTINÚE CON</span>
       </div>
 
       <!-- Social Login -->

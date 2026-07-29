@@ -1,0 +1,65 @@
+<!-- Modal Backdrop -->
+@if (show() && config()) {
+  <div 
+    class="dialog-backdrop" 
+    (click)="onBackdropClick($event)"
+  >
+    <!-- Modal Container -->
+    <div 
+      class="dialog-container"
+      [class.dialog-container--danger]="config()!.type === DialogType.DANGER"
+      [class.dialog-container--warning]="config()!.type === DialogType.WARNING"
+      [class.dialog-container--success]="config()!.type === DialogType.SUCCESS"
+      [class.dialog-container--info]="config()!.type === DialogType.INFO"
+    >
+      <!-- Header con Icono -->
+      <div class="dialog-header">
+        <div class="dialog-icon">
+          {{ getIcon() }}
+        </div>
+        <h2 class="dialog-title">{{ config()!.title }}</h2>
+      </div>
+
+      <!-- Body -->
+      <div class="dialog-body">
+        <p class="dialog-message">{{ config()!.message }}</p>
+
+        <!-- Lista de detalles (opcional) -->
+        @if (config()!.details && config()!.details!.length > 0) {
+          <ul class="dialog-details">
+            @for (detail of config()!.details; track $index) {
+              <li>{{ detail }}</li>
+            }
+          </ul>
+        }
+
+        <!-- Nota informativa (opcional) -->
+        @if (config()!.note) {
+          <div class="dialog-note">
+            <span class="dialog-note__icon">💡</span>
+            <span class="dialog-note__text">{{ config()!.note }}</span>
+          </div>
+        }
+      </div>
+
+      <!-- Footer con botones -->
+      <div class="dialog-footer">
+        <button 
+          type="button"
+          class="dialog-btn dialog-btn--secondary"
+          (click)="onCancel()"
+        >
+          {{ config()!.cancelText || 'Cancelar' }}
+        </button>
+        <button 
+          type="button"
+          class="dialog-btn dialog-btn--primary"
+          [class.dialog-btn--danger]="config()!.type === DialogType.DANGER"
+          (click)="onConfirm()"
+        >
+          {{ config()!.confirmText || 'Aceptar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

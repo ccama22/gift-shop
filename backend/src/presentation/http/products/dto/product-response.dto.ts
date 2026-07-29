@@ -6,6 +6,13 @@ export class ComboItemResponseDto {
   productPrice?: number;
 }
 
+export class ProductImageDto {
+  id!: string;
+  imageUrl!: string;
+  displayOrder!: number;
+  isPrimary!: boolean;
+}
+
 export class ProductResponseDto {
   id!: string;
   categoryId!: string;
@@ -14,7 +21,13 @@ export class ProductResponseDto {
   price!: number;
   stock!: number;
   isCombo!: boolean;
+  isActive!: boolean;
   imageUrl!: string | null;
+  images!: ProductImageDto[];
+  sku!: string | null;
+  tags!: string[];
+  lowStockAlert!: number;
   components?: ComboItemResponseDto[];
+  canBeSold?: boolean;
   createdAt!: Date;
 }

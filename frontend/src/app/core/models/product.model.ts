@@ -18,9 +18,50 @@ export interface Product {
   price: number;
   stock: number;
   isCombo: boolean;
+  isActive: boolean;
+  canBeSold?: boolean;
   imageUrl: string | null;
+  images?: ProductImage[];
+  sku: string | null;
+  tags: string[];
+  lowStockAlert: number;
   components?: ComboItem[];
   createdAt: Date;
+}
+
+export interface ProductImage {
+  id: string;
+  imageUrl: string;
+  displayOrder: number;
+  isPrimary: boolean;
+}
+
+export interface CreateProductRequest {
+  name: string;
+  description?: string;
+  price: number;
+  stock: number;
+  categoryId: string;
+  isActive?: boolean;
+  imageUrl?: string;
+  lowStockAlert?: number;
+  sku?: string;
+  tags?: string[];
+  isCombo?: boolean;
+}
+
+export interface UpdateProductRequest {
+  name?: string;
+  description?: string;
+  price?: number;
+  stock?: number;
+  categoryId?: string;
+  isActive?: boolean;
+  imageUrl?: string;
+  lowStockAlert?: number;
+  sku?: string;
+  tags?: string[];
+  isCombo?: boolean;
 }
 
 export interface Category {

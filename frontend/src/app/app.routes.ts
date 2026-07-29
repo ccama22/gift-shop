@@ -39,6 +39,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/pages/product-form/product-form.component').then(m => m.ProductFormComponent)
       },
       {
+        path: 'product/edit/:id',
+        loadComponent: () => import('./features/admin/pages/product-form/product-form.component').then(m => m.ProductFormComponent)
+      },
+      {
         path: '',
         redirectTo: 'inventory',
         pathMatch: 'full'

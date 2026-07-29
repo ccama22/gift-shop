@@ -17,10 +17,11 @@ export class ProductRepositoryImpl implements IProductRepository {
     const query = this.ormRepository
       .createQueryBuilder('product')
       .leftJoinAndSelect('product.components', 'components')
-      .leftJoinAndSelect('components.product', 'componentProduct');
+      .leftJoinAndSelect('components.product', 'componentProduct')
+      .where('product.deletedAt IS NULL'); // Excluir productos eliminados
 
     if (categoryId) {
-      query.where('product.categoryId = :categoryId', { categoryId });
+      query.andWhere('product.categoryId = :categoryId', { categoryId });
     }
 
     query.orderBy('product.createdAt', 'DESC');
@@ -35,6 +36,19 @@ export class ProductRepositoryImpl implements IProductRepository {
       .leftJoinAndSelect('product.components', 'components')
       .leftJoinAndSelect('components.product', 'componentProduct')
       .where('product.id = :id', { id })
+      .andWhere('product.deletedAt IS NULL') // Excluir si está eliminado
+      .getOne();
+
+    return product ? ProductMapper.toDomain(product) : null;
+  }
+
+  async findBySku(sku: string): Promise<ProductDomain | null> {
+    const product = await this.ormRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.components', 'components')
+      .leftJoinAndSelect('components.product', 'componentProduct')
+      .where('product.sku = :sku', { sku })
+      .andWhere('product.deletedAt IS NULL') // Excluir si está eliminado
       .getOne();
 
     return product ? ProductMapper.toDomain(product) : null;
@@ -44,5 +58,19 @@ export class ProductRepositoryImpl implements IProductRepository {
     const ormEntity = ProductMapper.toOrm(product);
     const saved = await this.ormRepository.save(ormEntity);
     return this.findById(saved.id) as Promise<ProductDomain>;
+  }
+
+  async findByIdWithImages(id: string): Promise<any> {
+    return await this.ormRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.images', 'images')
+      .where('product.id = :id', { id })
+      .andWhere('product.deletedAt IS NULL') // Excluir si está eliminado
+      .orderBy('images.displayOrder', 'ASC')
+      .getOne();
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.ormRepository.delete(id);
   }
 }

@@ -12,6 +12,8 @@ import {
   RefreshTokenResponse
 } from '@core/models/auth.model';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -19,8 +21,8 @@ export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
   
-  // API URL - Ajustar según tu backend
-  private readonly API_URL = 'http://localhost:3000/api';
+  // API URL desde environment
+  private readonly API_URL = environment.apiUrl;
   
   // Storage keys
   private readonly ACCESS_TOKEN_KEY = 'access_token';

@@ -1,0 +1,293 @@
+@use '../../../../styles/abstracts/variables' as *;
+@use '../../../../styles/abstracts/mixins' as *;
+
+// ============================================
+// CONFIRMATION DIALOG - Mobile First
+// ============================================
+
+// Backdrop (fondo oscuro)
+.dialog-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($color-neutral-900, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: flex-end; // Mobile: desde abajo
+  justify-content: center;
+  z-index: $z-index-modal;
+  padding: 0;
+  animation: fadeIn 200ms ease-out;
+
+  // Tablet y Desktop: centrado
+  @media (min-width: $breakpoint-md) {
+    align-items: center;
+    padding: $spacing-4;
+  }
+}
+
+// Container del modal
+.dialog-container {
+  background: $color-bg-primary;
+  border-radius: $radius-2xl $radius-2xl 0 0; // Mobile: redondeado arriba
+  box-shadow: $shadow-2xl;
+  width: 100%;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 250ms ease-out;
+
+  // Tablet y Desktop
+  @media (min-width: $breakpoint-md) {
+    border-radius: $radius-2xl; // Redondeado completo
+    max-width: 480px;
+    animation: slideIn 250ms ease-out;
+  }
+
+  // Variantes de color según tipo
+  &--danger {
+    border-top: 4px solid $color-error;
+  }
+
+  &--warning {
+    border-top: 4px solid $color-warning;
+  }
+
+  &--success {
+    border-top: 4px solid $color-success;
+  }
+
+  &--info {
+    border-top: 4px solid $color-info;
+  }
+}
+
+// Header
+.dialog-header {
+  padding: $spacing-6 $spacing-6 $spacing-4;
+  text-align: center;
+
+  @media (min-width: $breakpoint-md) {
+    padding: $spacing-8 $spacing-8 $spacing-4;
+  }
+}
+
+.dialog-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  font-size: $font-size-3xl;
+  background: linear-gradient(135deg, $color-primary-100, $color-rose-100);
+  border-radius: $radius-full;
+  margin-bottom: $spacing-4;
+
+  @media (min-width: $breakpoint-md) {
+    width: 64px;
+    height: 64px;
+    font-size: $font-size-4xl;
+  }
+}
+
+.dialog-title {
+  font-family: $font-display;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin: 0;
+  line-height: $line-height-tight;
+
+  @media (min-width: $breakpoint-md) {
+    font-size: $font-size-2xl;
+  }
+}
+
+// Body
+.dialog-body {
+  padding: 0 $spacing-6 $spacing-6;
+
+  @media (min-width: $breakpoint-md) {
+    padding: 0 $spacing-8 $spacing-8;
+  }
+}
+
+.dialog-message {
+  font-size: $font-size-base;
+  color: $color-text-secondary;
+  line-height: $line-height-relaxed;
+  margin: 0 0 $spacing-4;
+  text-align: center;
+
+  @media (min-width: $breakpoint-md) {
+    font-size: $font-size-lg;
+  }
+}
+
+// Lista de detalles
+.dialog-details {
+  list-style: none;
+  padding: 0;
+  margin: $spacing-4 0;
+  background: $color-bg-secondary;
+  border-radius: $radius-lg;
+  padding: $spacing-4;
+
+  li {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    padding: $spacing-2 0;
+    padding-left: $spacing-6;
+    position: relative;
+    line-height: $line-height-normal;
+
+    &::before {
+      content: '•';
+      position: absolute;
+      left: $spacing-3;
+      color: $color-primary-600;
+      font-weight: $font-weight-bold;
+    }
+
+    @media (min-width: $breakpoint-md) {
+      font-size: $font-size-base;
+    }
+  }
+}
+
+// Nota informativa
+.dialog-note {
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-2;
+  padding: $spacing-3 $spacing-4;
+  background: linear-gradient(135deg, $color-primary-50, $color-rose-50);
+  border-left: 3px solid $color-primary-400;
+  border-radius: $radius-md;
+  margin-top: $spacing-4;
+
+  &__icon {
+    font-size: $font-size-lg;
+    flex-shrink: 0;
+  }
+
+  &__text {
+    font-size: $font-size-sm;
+    color: $color-primary-800;
+    line-height: $line-height-normal;
+
+    @media (min-width: $breakpoint-md) {
+      font-size: $font-size-base;
+    }
+  }
+}
+
+// Footer con botones
+.dialog-footer {
+  display: flex;
+  gap: $spacing-3;
+  padding: $spacing-4 $spacing-6 $spacing-6;
+  border-top: 1px solid $color-border-light;
+
+  @media (min-width: $breakpoint-md) {
+    padding: $spacing-4 $spacing-8 $spacing-8;
+    gap: $spacing-4;
+  }
+}
+
+// Botones
+.dialog-btn {
+  flex: 1;
+  padding: $spacing-3 $spacing-4;
+  font-family: $font-primary;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  border-radius: $radius-lg;
+  border: none;
+  cursor: pointer;
+  transition: all $transition-fast;
+  white-space: nowrap;
+
+  @media (min-width: $breakpoint-md) {
+    padding: $spacing-4 $spacing-6;
+    font-size: $font-size-base;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  // Botón secundario (Cancelar)
+  &--secondary {
+    background: $color-neutral-100;
+    color: $color-text-secondary;
+
+    &:hover {
+      background: $color-neutral-200;
+      color: $color-text-primary;
+    }
+  }
+
+  // Botón primario (Confirmar)
+  &--primary {
+    background: linear-gradient(135deg, $color-primary-600, $color-primary-700);
+    color: $color-text-inverse;
+    box-shadow: $shadow-sm;
+
+    &:hover {
+      background: linear-gradient(135deg, $color-primary-700, $color-primary-800);
+      box-shadow: $shadow-md;
+      transform: translateY(-1px);
+    }
+
+    // Variante peligrosa
+    &.dialog-btn--danger {
+      background: linear-gradient(135deg, $color-error, shade($color-error, 10%));
+
+      &:hover {
+        background: linear-gradient(135deg, shade($color-error, 10%), shade($color-error, 20%));
+      }
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ============================================
+// ANIMACIONES
+// ============================================
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

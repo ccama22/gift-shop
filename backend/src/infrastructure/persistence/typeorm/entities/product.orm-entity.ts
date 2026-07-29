@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 import { CategoryOrmEntity } from './category.orm-entity';
 import { ComboItemOrmEntity } from './combo-item.orm-entity';
+import { ProductImageOrmEntity } from './product-image.orm-entity';
 
 @Entity('products')
 export class ProductOrmEntity {
@@ -41,11 +42,34 @@ export class ProductOrmEntity {
   @Column({ type: 'boolean', default: false })
   isCombo!: boolean;
 
+  @Column({ type: 'boolean', default: true })
+  isActive!: boolean;
+
   @Column({ type: 'varchar', length: 500, nullable: true })
   imageUrl!: string | null;
 
+  // Nuevos campos agregados
+  @Column({ type: 'varchar', length: 50, unique: true, nullable: true })
+  sku!: string | null;
+
+  @Column({ type: 'jsonb', default: '[]' })
+  tags!: string[];
+
+  @Column({ type: 'int', default: 10 })
+  lowStockAlert!: number;
+
+  @Column({ type: 'timestamptz', nullable: true, default: null })
+  @Index()
+  deletedAt!: Date | null;
+
   @OneToMany(() => ComboItemOrmEntity, (item) => item.combo, { cascade: true })
   components!: Relation<ComboItemOrmEntity>[];
+
+  @OneToMany(() => ProductImageOrmEntity, (image) => image.product, {
+    cascade: true,
+    eager: true,
+  })
+  images!: Relation<ProductImageOrmEntity>[];
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt!: Date;

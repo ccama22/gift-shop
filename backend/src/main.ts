@@ -1,3 +1,5 @@
+import express from 'express';
+import { join } from 'path';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -8,6 +10,9 @@ import { HttpExceptionFilter } from './presentation/http/filters/http-exception.
 async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule);
+
+  // Servir archivos estáticos subidos
+  app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
   // 1. Middleware de cookies
   app.use(cookieParser());
