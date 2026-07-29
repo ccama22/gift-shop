@@ -328,3 +328,8 @@ PORT=3001
 ---
 
 **Desarrollado con NestJS + Clean Architecture + PostgreSQL**
+
+# Probar inicio de seccion en el admin template
+# es un admin que se sedeo por defecto en user.seeder.ts
+  email: 'admin@example.com'
+  password: 'Admin123!',
