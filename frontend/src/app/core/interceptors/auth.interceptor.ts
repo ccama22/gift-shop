@@ -10,19 +10,20 @@ import { AuthService } from '@core/services/auth.service';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   
-  // Skip interceptor for public endpoints
+  // Skip interceptor for public endpoints (solo GET)
   const publicEndpoints = [
     '/auth/login',
     '/auth/register', 
     '/auth/refresh',
-    '/products',  // Productos son públicos
-    '/products/', // Detalle de producto
     '/categories' // Categorías son públicas
   ];
   
   const isPublicEndpoint = publicEndpoints.some(endpoint => req.url.includes(endpoint));
   
-  if (isPublicEndpoint) {
+  // GET /products es público, pero POST/PATCH/DELETE no
+  const isPublicProductsRequest = req.url.includes('/products') && req.method === 'GET';
+  
+  if (isPublicEndpoint || isPublicProductsRequest) {
     return next(req);
   }
 
