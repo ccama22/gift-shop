@@ -10,10 +10,19 @@ import { AuthService } from '@core/services/auth.service';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   
-  // Skip interceptor for auth endpoints
-  if (req.url.includes('/auth/login') || 
-      req.url.includes('/auth/register') ||
-      req.url.includes('/auth/refresh')) {
+  // Skip interceptor for public endpoints
+  const publicEndpoints = [
+    '/auth/login',
+    '/auth/register', 
+    '/auth/refresh',
+    '/products',  // Productos son públicos
+    '/products/', // Detalle de producto
+    '/categories' // Categorías son públicas
+  ];
+  
+  const isPublicEndpoint = publicEndpoints.some(endpoint => req.url.includes(endpoint));
+  
+  if (isPublicEndpoint) {
     return next(req);
   }
 

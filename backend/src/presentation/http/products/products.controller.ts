@@ -12,10 +12,12 @@ import {
   Inject,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery, ApiConsumes, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
 import { v4 as uuidv4 } from 'uuid';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import * as DI_TOKENS from '../../../application/ports/tokens';
 import type { IProductRepository } from '../../../application/ports/out/repositories/product.repository.interface';
 import type { ICategoryRepository } from '../../../application/ports/out/repositories/category.repository.interface';
@@ -142,13 +144,16 @@ export class ProductsController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Crear nuevo producto' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Crear nuevo producto (requiere autenticación)' })
   @ApiResponse({
     status: 201,
     type: ProductResponseDto,
     description: 'Producto creado exitosamente',
   })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 404, description: 'Categoría no encontrada' })
   async createProduct(
     @Body() dto: CreateProductRequestDto,
@@ -172,12 +177,15 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Actualizar producto' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Actualizar producto (requiere autenticación)' })
   @ApiResponse({
     status: 200,
     type: ProductResponseDto,
     description: 'Producto actualizado exitosamente',
   })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 404, description: 'Producto no encontrado' })
   @ApiResponse({ status: 400, description: 'Datos inválidos' })
   async updateProduct(
@@ -189,12 +197,15 @@ export class ProductsController {
   }
 
   @Patch(':id/status')
-  @ApiOperation({ summary: 'Activar/Desactivar producto' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Activar/Desactivar producto (requiere autenticación)' })
   @ApiResponse({
     status: 200,
     type: ProductResponseDto,
     description: 'Estado actualizado exitosamente',
   })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 404, description: 'Producto no encontrado' })
   async updateProductStatus(
     @Param('id') id: string,
@@ -208,8 +219,10 @@ export class ProductsController {
   }
 
   @Post('upload-image')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @UseInterceptors(FileInterceptor('image', multerConfig))
-  @ApiOperation({ summary: 'Subir imagen de producto' })
+  @ApiOperation({ summary: 'Subir imagen de producto (requiere autenticación)' })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -224,6 +237,7 @@ export class ProductsController {
   })
   @ApiResponse({ status: 201, description: 'Imagen subida correctamente' })
   @ApiResponse({ status: 400, description: 'No se proporcionó imagen o tipo no permitido' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
   async uploadImage(@UploadedFile() file?: Express.Multer.File) {
     if (!file) {
       throw new BadRequestException('No se proporcionó ninguna imagen');
@@ -234,8 +248,11 @@ export class ProductsController {
   }
 
   @Post(':id/images')
-  @ApiOperation({ summary: 'Agregar imágenes a un producto' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Agregar imágenes a un producto (requiere autenticación)' })
   @ApiResponse({ status: 201, description: 'Imágenes agregadas' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
   async addProductImages(
     @Param('id') productId: string,
     @Body() body: { images: Array<{ url: string; isPrimary?: boolean }> },
@@ -263,8 +280,11 @@ export class ProductsController {
   }
 
   @Delete(':productId/images/:imageId')
-  @ApiOperation({ summary: 'Eliminar una imagen de un producto' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Eliminar una imagen de un producto (requiere autenticación)' })
   @ApiResponse({ status: 200, description: 'Imagen eliminada' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
   async deleteProductImage(
     @Param('productId') productId: string,
     @Param('imageId') imageId: string,
@@ -287,8 +307,11 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Eliminar un producto' })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
+  @ApiOperation({ summary: 'Eliminar un producto (requiere autenticación)' })
   @ApiResponse({ status: 200, description: 'Producto eliminado' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 404, description: 'Producto no encontrado' })
   async deleteProduct(@Param('id') id: string) {
     await this.deleteProductUseCase.execute(id);

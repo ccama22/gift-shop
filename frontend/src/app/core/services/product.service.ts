@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, tap, catchError, of, finalize, throwError } from 'rxjs';
+import { Observable, tap, catchError, of, finalize, throwError, timeout } from 'rxjs';
 import { Product, Category, ProductFilters, CreateProductRequest, UpdateProductRequest } from '@core/models/product.model';
 import { environment } from '../../../environments/environment';
 
@@ -137,13 +137,17 @@ export class ProductService {
     }
 
     return this.http.get<Product[]>(`${this.API_URL}/products`, { params }).pipe(
+      timeout(10000), // 10 segundos de timeout
       tap(products => {
         this.productsSignal.set(products);
       }),
       catchError(error => {
         console.error('Error cargando productos:', error);
-        this.errorSignal.set('Error al cargar productos. Por favor intenta de nuevo.');
-        return of([]);
+        const errorMsg = error.name === 'TimeoutError' 
+          ? 'La petición tardó demasiado. Verifica tu conexión.'
+          : 'Error al cargar productos. Por favor intenta de nuevo.';
+        this.errorSignal.set(errorMsg);
+        return throwError(() => error); // Propagar el error en lugar de retornar array vacío
       }),
       finalize(() => {
         this.loadingSignal.set(false);

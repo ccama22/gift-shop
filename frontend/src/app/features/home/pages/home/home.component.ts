@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Componentes
@@ -24,6 +24,7 @@ import { Product as BackendProduct } from '@core/models/product.model';
 })
 export class HomeComponent implements OnInit {
   private readonly productService = inject(ProductService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   allProducts: Product[] = [];
   filteredProducts: Product[] = [];
@@ -41,29 +42,32 @@ export class HomeComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
     
-    console.log('🔍 Iniciando carga de productos...');
-    console.log('📡 API URL:', this.productService.API_URL);
+    // Timeout de 10 segundos para evitar carga infinita
+    const timeoutId = setTimeout(() => {
+      if (this.isLoading) {
+        this.isLoading = false;
+        this.errorMessage = 'La petición tardó demasiado. Verifica tu conexión o recarga la página.';
+        this.cdr.detectChanges();
+      }
+    }, 10000);
     
     this.productService.loadProducts().subscribe({
       next: (backendProducts) => {
-        console.log('✅ Productos recibidos del backend:', backendProducts);
-        console.log('📊 Total de productos:', backendProducts.length);
+        clearTimeout(timeoutId);
         
         // Mapear productos del backend al formato del componente
         this.allProducts = backendProducts
           .filter(p => p.isActive) // Solo productos activos
           .map(p => this.mapBackendProduct(p));
         
-        console.log('✅ Productos activos mapeados:', this.allProducts.length);
-        
         this.filteredProducts = [...this.allProducts];
         this.isLoading = false;
+        
+        // Forzar detección de cambios
+        this.cdr.detectChanges();
       },
       error: (error) => {
-        console.error('❌ Error cargando productos:', error);
-        console.error('❌ Status:', error.status);
-        console.error('❌ Message:', error.message);
-        console.error('❌ Error completo:', JSON.stringify(error, null, 2));
+        clearTimeout(timeoutId);
         
         // Mensaje amigable según el tipo de error
         if (error.status === 0) {
@@ -75,6 +79,7 @@ export class HomeComponent implements OnInit {
         }
         
         this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -99,8 +104,8 @@ export class HomeComponent implements OnInit {
       price: product.price,
       image: fullImageUrl,
       badge: this.getBadgeForProduct(product),
-      rating: 5, // TODO: Implementar sistema de ratings
-      reviews: Math.floor(Math.random() * 100) + 10, // TODO: Implementar reviews reales
+      rating: 5,
+      reviews: Math.floor(Math.random() * 100) + 10,
       category: product.categoryId,
       occasion: this.getOccasionFromTags(product.tags)
     };
