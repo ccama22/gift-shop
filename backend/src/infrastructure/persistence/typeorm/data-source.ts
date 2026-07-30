@@ -10,6 +10,7 @@ import {
   OrderOrmEntity,
   OrderItemOrmEntity,
 } from './entities';
+import { ProductImageOrmEntity } from './entities/product-image.orm-entity';
 
 // Cargar variables de entorno
 config();
@@ -35,6 +36,7 @@ export const AppDataSource = new DataSource({
     SessionOrmEntity,
     CategoryOrmEntity,
     ProductOrmEntity,
+    ProductImageOrmEntity,
     ComboItemOrmEntity,
     AddressOrmEntity,
     OrderOrmEntity,
